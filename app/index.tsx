@@ -10,7 +10,7 @@ export default function Dashboard() {
     // Add more items as per your data
   ]);
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
   };
 
