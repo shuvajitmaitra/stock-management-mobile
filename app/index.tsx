@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image, StatusBar } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import Feather from "@expo/vector-icons/Feather";
 import Item from "@/components/sharedCom/Item";
 import { Colors } from "@/constant/Colors";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
@@ -66,12 +64,12 @@ export default function Dashboard() {
     { id: "product23", name: "ECG 6 Channel ECARE (ECG-606A)", quantity: 0, lastUpdate: "01:29 PM 05 Jan, 2025", image: "image-url-2" },
     { id: "product24", name: "CPAP Machine (G3 A20)", quantity: 0, lastUpdate: "12:45 PM 05 Jan, 2025", image: "image-url-3" },
   ]);
+  const filteredProducts = products.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const handleDelete = (id: string) => {
     setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
   };
 
-  const filteredProducts = products.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
   const { top } = useSafeAreaInsets();
   return (
     <View style={[styles.container, { paddingTop: top }]}>

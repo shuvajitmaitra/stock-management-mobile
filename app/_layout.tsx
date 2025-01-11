@@ -81,6 +81,7 @@ export default function RootLayout() {
           <Tabs.Screen
             name="stock-in"
             options={{
+              headerShown: false,
               title: "Stock In",
               tabBarIcon: ({ color, focused }) => (
                 <View style={focused && styles.tabBarItemContainer}>
@@ -93,6 +94,7 @@ export default function RootLayout() {
           <Tabs.Screen
             name="stock-out"
             options={{
+              headerShown: false,
               title: "Stock Out",
               tabBarIcon: ({ color, focused }) => (
                 <View style={focused && styles.tabBarItemContainer}>
