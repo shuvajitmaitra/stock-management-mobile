@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } from "react-native";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Feather from "@expo/vector-icons/Feather";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Item from "@/components/sharedCom/Item";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -7,7 +11,33 @@ export default function Dashboard() {
     { id: "1", name: "ECG 12 Channel EDAN (SE 1200 EXPRESS)", quantity: 0, lastUpdate: "01:36 PM 05 Jan, 2025", image: "image-url-1" },
     { id: "2", name: "ECG 6 Channel ECARE (ECG-606A)", quantity: 0, lastUpdate: "01:29 PM 05 Jan, 2025", image: "image-url-2" },
     { id: "3", name: "CPAP Machine (G3 A20)", quantity: 0, lastUpdate: "12:45 PM 05 Jan, 2025", image: "image-url-3" },
-    // Add more items as per your data
+    { id: "4", name: "Defib (DS 2)", quantity: 0, lastUpdate: "01:36 PM 05 Jan, 2025", image: "image-url-1" },
+    { id: "5", name: "ECG 6 Channel ECARE (ECG-606A)", quantity: 0, lastUpdate: "01:29 PM 05 Jan, 2025", image: "image-url-2" },
+    { id: "6", name: "CPAP Machine (G3 A20)", quantity: 0, lastUpdate: "12:45 PM 05 Jan, 2025", image: "image-url-3" },
+    { id: "1", name: "ECG 12 Channel EDAN (SE 1200 EXPRESS)", quantity: 0, lastUpdate: "01:36 PM 05 Jan, 2025", image: "image-url-1" },
+    { id: "2", name: "ECG 6 Channel ECARE (ECG-606A)", quantity: 0, lastUpdate: "01:29 PM 05 Jan, 2025", image: "image-url-2" },
+    { id: "3", name: "CPAP Machine (G3 A20)", quantity: 0, lastUpdate: "12:45 PM 05 Jan, 2025", image: "image-url-3" },
+    { id: "4", name: "Defib (DS 2)", quantity: 0, lastUpdate: "01:36 PM 05 Jan, 2025", image: "image-url-1" },
+    { id: "5", name: "ECG 6 Channel ECARE (ECG-606A)", quantity: 0, lastUpdate: "01:29 PM 05 Jan, 2025", image: "image-url-2" },
+    { id: "6", name: "CPAP Machine (G3 A20)", quantity: 0, lastUpdate: "12:45 PM 05 Jan, 2025", image: "image-url-3" },
+    { id: "1", name: "ECG 12 Channel EDAN (SE 1200 EXPRESS)", quantity: 0, lastUpdate: "01:36 PM 05 Jan, 2025", image: "image-url-1" },
+    { id: "2", name: "ECG 6 Channel ECARE (ECG-606A)", quantity: 0, lastUpdate: "01:29 PM 05 Jan, 2025", image: "image-url-2" },
+    { id: "3", name: "CPAP Machine (G3 A20)", quantity: 0, lastUpdate: "12:45 PM 05 Jan, 2025", image: "image-url-3" },
+    { id: "4", name: "Defib (DS 2)", quantity: 0, lastUpdate: "01:36 PM 05 Jan, 2025", image: "image-url-1" },
+    { id: "5", name: "ECG 6 Channel ECARE (ECG-606A)", quantity: 0, lastUpdate: "01:29 PM 05 Jan, 2025", image: "image-url-2" },
+    { id: "6", name: "CPAP Machine (G3 A20)", quantity: 0, lastUpdate: "12:45 PM 05 Jan, 2025", image: "image-url-3" },
+    { id: "1", name: "ECG 12 Channel EDAN (SE 1200 EXPRESS)", quantity: 0, lastUpdate: "01:36 PM 05 Jan, 2025", image: "image-url-1" },
+    { id: "2", name: "ECG 6 Channel ECARE (ECG-606A)", quantity: 0, lastUpdate: "01:29 PM 05 Jan, 2025", image: "image-url-2" },
+    { id: "3", name: "CPAP Machine (G3 A20)", quantity: 0, lastUpdate: "12:45 PM 05 Jan, 2025", image: "image-url-3" },
+    { id: "4", name: "Defib (DS 2)", quantity: 0, lastUpdate: "01:36 PM 05 Jan, 2025", image: "image-url-1" },
+    { id: "5", name: "ECG 6 Channel ECARE (ECG-606A)", quantity: 0, lastUpdate: "01:29 PM 05 Jan, 2025", image: "image-url-2" },
+    { id: "6", name: "CPAP Machine (G3 A20)", quantity: 0, lastUpdate: "12:45 PM 05 Jan, 2025", image: "image-url-3" },
+    { id: "1", name: "ECG 12 Channel EDAN (SE 1200 EXPRESS)", quantity: 0, lastUpdate: "01:36 PM 05 Jan, 2025", image: "image-url-1" },
+    { id: "2", name: "ECG 6 Channel ECARE (ECG-606A)", quantity: 0, lastUpdate: "01:29 PM 05 Jan, 2025", image: "image-url-2" },
+    { id: "3", name: "CPAP Machine (G3 A20)", quantity: 0, lastUpdate: "12:45 PM 05 Jan, 2025", image: "image-url-3" },
+    { id: "4", name: "Defib (DS 2)", quantity: 0, lastUpdate: "01:36 PM 05 Jan, 2025", image: "image-url-1" },
+    { id: "5", name: "ECG 6 Channel ECARE (ECG-606A)", quantity: 0, lastUpdate: "01:29 PM 05 Jan, 2025", image: "image-url-2" },
+    { id: "6", name: "CPAP Machine (G3 A20)", quantity: 0, lastUpdate: "12:45 PM 05 Jan, 2025", image: "image-url-3" },
   ]);
 
   const handleDelete = (id: string) => {
@@ -18,48 +48,21 @@ export default function Dashboard() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <Text style={styles.header}>Dashboard</Text>
-
-      {/* Buttons */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.buttonText}>Add Product</Text>
+          <AntDesign name="plus" size={24} color="white" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.stockButton}>
-          <Text style={styles.buttonText}>Stock Update</Text>
+          <Feather name="edit" size={24} color="white" />
         </TouchableOpacity>
+        <TextInput style={styles.searchBar} placeholder="Search product" value={searchQuery} onChangeText={setSearchQuery} />
       </View>
 
-      {/* Search Bar */}
-      <TextInput style={styles.searchBar} placeholder="Search product" value={searchQuery} onChangeText={setSearchQuery} />
-
-      {/* Table Header */}
-      <View style={styles.tableHeader}>
-        <Text style={styles.tableHeaderCell}>Serial</Text>
-        <Text style={styles.tableHeaderCell}>Product Name</Text>
-        <Text style={styles.tableHeaderCell}>Image</Text>
-        <Text style={styles.tableHeaderCell}>Quantity</Text>
-        <Text style={styles.tableHeaderCell}>Last Update</Text>
-        <Text style={styles.tableHeaderCell}>Action</Text>
-      </View>
-
-      {/* Product Table */}
       <FlatList
         data={filteredProducts}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.tableRow}>
-            <Text style={styles.tableCell}>{item.id}</Text>
-            <Text style={styles.tableCell}>{item.name}</Text>
-            <Image source={{ uri: item.image }} style={styles.productImage} />
-            <Text style={styles.tableCell}>{item.quantity}</Text>
-            <Text style={styles.tableCell}>{item.lastUpdate}</Text>
-            <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
-              <Text style={styles.deleteButtonText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        keyExtractor={(item) => Math.random().toString()}
+        renderItem={({ item }) => <Item item={item} />}
       />
     </View>
   );
@@ -68,20 +71,15 @@ export default function Dashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 15,
     backgroundColor: "#1c1e24",
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 20,
-    textAlign: "center",
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 15,
+    // backgroundColor: "red",
   },
   addButton: {
     backgroundColor: "#007bff",
@@ -93,16 +91,12 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
   searchBar: {
+    flex: 1,
     backgroundColor: "#fff",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 20,
+    height: 45,
   },
   tableHeader: {
     flexDirection: "row",
@@ -138,12 +132,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   deleteButton: {
-    backgroundColor: "#dc3545",
     padding: 5,
-    borderRadius: 5,
-  },
-  deleteButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
   },
 });
