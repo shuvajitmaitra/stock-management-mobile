@@ -46,6 +46,7 @@ export default function RootLayout() {
           screenOptions={{
             headerStyle: {
               backgroundColor: Colors.header,
+              // height: 90,
             },
             headerTitleStyle: {
               color: Colors.white,
@@ -68,6 +69,7 @@ export default function RootLayout() {
             name="index"
             options={{
               title: "Dashboard",
+              headerShown: false,
               tabBarIcon: ({ color, size, focused }) => (
                 <View style={focused && styles.tabBarItemContainer}>
                   <HomeIcon size={size} color={color} />
