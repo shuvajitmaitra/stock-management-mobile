@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Colors } from "@/constant/Colors";
 
 interface Product {
   id: string;
@@ -39,10 +40,9 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#2c2f3a",
+    backgroundColor: Colors.primary,
     borderRadius: 10,
     padding: 15,
-    marginVertical: 5,
   },
   productImage: {
     width: 70,

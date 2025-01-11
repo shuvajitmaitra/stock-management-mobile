@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Item from "@/components/sharedCom/Item";
+import { Colors } from "@/constant/Colors";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
-    backgroundColor: "#1c1e24",
+    backgroundColor: Colors.header,
   },
   buttonContainer: {
     flexDirection: "row",
