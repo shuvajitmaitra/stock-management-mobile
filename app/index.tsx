@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image, StatusBar } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import Item from "@/components/sharedCom/Item";
@@ -75,13 +75,8 @@ export default function Dashboard() {
   const { top } = useSafeAreaInsets();
   return (
     <View style={[styles.container, { paddingTop: top }]}>
+      <StatusBar backgroundColor={Colors.header} barStyle="light-content" />
       <View style={styles.buttonContainer}>
-        {/* <TouchableOpacity style={styles.addButton}>
-          <AntDesign name="plus" size={24} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.stockButton}>
-          <Feather name="edit" size={24} color="white" />
-        </TouchableOpacity> */}
         <TextInput
           style={styles.searchBar}
           placeholder="Search product"
@@ -126,16 +121,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     // backgroundColor: "red",
   },
-  addButton: {
-    backgroundColor: "#007bff",
-    padding: 10,
-    borderRadius: 5,
-  },
-  stockButton: {
-    backgroundColor: "#28a745",
-    padding: 10,
-    borderRadius: 5,
-  },
+
   searchBar: {
     flex: 1,
     backgroundColor: Colors.secondary,
