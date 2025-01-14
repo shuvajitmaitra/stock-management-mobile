@@ -2,23 +2,34 @@ import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Colors } from "@/constant/Colors";
+import { formatDate } from "@/utils/commonFunction";
 
-const Item = ({ item, onDelete }) => {
+const Item = ({ item, onDelete, onEdit }) => {
   return (
     <View style={styles.itemContainer}>
-      <Image source={require("@/assets/images/no_image.jpg")} style={styles.productImage} resizeMode="contain" />
+      <Image
+        source={item.image ? { uri: item.image } : require("@/assets/images/no_image.jpg")}
+        style={styles.productImage}
+        resizeMode="contain"
+      />
       <View style={styles.itemDetails}>
         <Text style={styles.itemName} numberOfLines={2}>
           {item.name}
         </Text>
         <View style={styles.itemMetadata}>
-          <Text style={styles.quantityText}>Qty: {item.quantity}</Text>
-          <Text style={styles.updateText}>{item.lastUpdate}</Text>
+          <Text style={styles.quantityText}>Qty: {item.stockQuantity}</Text>
+          <View style={{ flex: 1 }} />
+          <Text style={styles.updateText}>{formatDate(item?.date)}</Text>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.editButton} onPress={() => onEdit && onEdit(item.id)}>
+              <MaterialIcons name="edit" size={24} color="#4ecdc4" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.deleteButton} onPress={() => onDelete && onDelete(item.id)}>
+              <MaterialIcons name="delete" size={24} color="#ff6b6b" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-      <TouchableOpacity style={styles.deleteButton} onPress={() => onDelete && onDelete(item.id)}>
-        <MaterialIcons name="delete" size={24} color="#ff6b6b" />
-      </TouchableOpacity>
     </View>
   );
 };
@@ -50,6 +61,9 @@ const styles = StyleSheet.create({
   itemMetadata: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    // backgroundColor: "red",
+    gap: 10,
   },
   quantityText: {
     color: "#4ecdc4",
@@ -59,8 +73,16 @@ const styles = StyleSheet.create({
     color: "#a0a0a0",
     fontSize: 12,
   },
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    gap: 5,
+  },
+  editButton: {
+    padding: 5,
+  },
   deleteButton: {
-    padding: 10,
+    padding: 5,
   },
 });
 

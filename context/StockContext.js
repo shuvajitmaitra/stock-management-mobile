@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axiosInstance from "../constant/axios";
-
-// Create the context with a default value of `undefined`
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const StockContext = createContext(undefined);
 
 // Custom hook for consuming the context
@@ -23,8 +22,7 @@ export const StockProvider = ({ children }) => {
   const [sTUVisible, setSTUVisible] = useState(false);
 
   // Retrieve the logged-in user from local storage
-  const userJSON = localStorage.getItem("user");
-  const user = userJSON ? JSON.parse(userJSON) : null;
+  const user = AsyncStorage.getItem("email");
 
   const handleUserLogin = (e) => {
     e.preventDefault();
@@ -106,9 +104,10 @@ export const StockProvider = ({ children }) => {
     axiosInstance
       .get("/products")
       .then((res) => {
+        console.log("res.data", JSON.stringify(res.data, null, 2));
         if (res.data.success) {
-          setProducts(res.data.data);
-          setAllProducts(res.data.data);
+          setProducts(res.data.products);
+          setAllProducts(res.data.products);
         }
       })
       .catch((error) => console.error("Error fetching products:", error));
@@ -123,9 +122,10 @@ export const StockProvider = ({ children }) => {
     axiosInstance
       .get("/histories")
       .then((res) => {
+        console.log("histories", JSON.stringify(res.data, null, 2));
         if (res.data.success) {
-          setStockIn(res.data.data.stockIn);
-          setStockOut(res.data.data.stockOut);
+          setStockIn(res.data.stockIn);
+          setStockOut(res.data.stockOut);
         }
       })
       .catch((error) => console.error("Error fetching histories:", error));
@@ -153,7 +153,7 @@ export const StockProvider = ({ children }) => {
       getProducts();
       getHistories();
     }
-  }, [user]);
+  }, []);
 
   const contextValue = {
     user,
