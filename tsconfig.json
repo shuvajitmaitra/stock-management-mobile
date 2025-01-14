@@ -20,6 +20,7 @@
     "app/_layout.js",
     "constant/Colors.js",
     "components/SignIn.js",
-    "components/HeaderPopup.js"
+    "components/HeaderPopup.js",
+    "utils/commonFunction.js"
   ]
 }
