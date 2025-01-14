@@ -6,5 +6,20 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "assets/icons/StockInIcon.js"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "assets/icons/StockInIcon.js",
+    "context/StockContext.js",
+    "components/sharedCom/Item.js",
+    "app/stock-out.js",
+    "app/stock-in.js",
+    "app/index.js",
+    "app/_layout.js",
+    "constant/Colors.js",
+    "components/SignIn.js",
+    "components/HeaderPopup.js"
+  ]
 }

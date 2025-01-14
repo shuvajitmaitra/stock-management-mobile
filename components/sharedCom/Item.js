@@ -3,20 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Colors } from "@/constant/Colors";
 
-interface Product {
-  id: string;
-  name: string;
-  quantity: number;
-  lastUpdate: string;
-  image: string;
-}
-
-interface ItemProps {
-  item: Product;
-  onDelete?: (id: string) => void;
-}
-
-const Item: React.FC<ItemProps> = ({ item, onDelete }) => {
+const Item = ({ item, onDelete }) => {
   return (
     <View style={styles.itemContainer}>
       <Image source={require("@/assets/images/no_image.jpg")} style={styles.productImage} resizeMode="contain" />

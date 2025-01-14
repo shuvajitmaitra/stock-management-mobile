@@ -4,7 +4,7 @@ import { Colors } from "@/constant/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Item from "@/components/sharedCom/Item";
 
-const StockIn: React.FC = () => {
+const StockOut = () => {
   const { top } = useSafeAreaInsets();
   const [products, setProducts] = useState([
     {
@@ -59,8 +59,8 @@ const StockIn: React.FC = () => {
 
   return (
     <View style={[styles.container, { paddingTop: top }]}>
-      <Text style={styles.headingText}>Stock In</Text>
-      <Text style={styles.subHeadingText}>Monitor Every Restock, Effortlessly.</Text>
+      <Text style={styles.headingText}>Stock Out</Text>
+      <Text style={styles.subHeadingText}>Your Stock Out History, All in One Place.</Text>
       <FlatList
         data={products}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
@@ -71,7 +71,7 @@ const StockIn: React.FC = () => {
   );
 };
 
-export default StockIn;
+export default StockOut;
 
 const styles = StyleSheet.create({
   headingText: {

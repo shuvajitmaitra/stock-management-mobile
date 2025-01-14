@@ -4,18 +4,8 @@ import Popover, { Rect } from "react-native-popover-view";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constant/Colors";
-// Define the type for `position`
-interface Position {
-  x: number;
-  y: number;
-}
 
-interface HeaderPopupProps {
-  position?: Position | null; // Updated to match index.tsx type
-  setPosition: (position: Position | null) => void; // Allow null in setPosition
-}
-
-const HeaderPopup: React.FC<HeaderPopupProps> = ({ position, setPosition }) => {
+const HeaderPopup = ({ position, setPosition }) => {
   console.log("pos", JSON.stringify(position, null, 2));
   // Updated type checking to handle the new position type
 
