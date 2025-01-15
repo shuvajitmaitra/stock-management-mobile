@@ -1,4 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { EXPO_CLOUDINARY_UPLOAD_URL, EXPO_CLOUDINARY_UPLOAD_PRESET } from "@env";
 
 export function formatDate(dateStr) {
   if (!dateStr) return dateStr;
@@ -78,4 +80,38 @@ export const debounce = (func, delay = 300) => {
       func(...args);
     }, delay);
   };
+};
+
+// utils/commonFunctions.js
+
+export const uploadImageToCloudinary = async (uri, setIsUploading, setUploadedImageUrl) => {
+  if (!uri) {
+    alert("Please select or capture an image first!");
+    return null;
+  }
+
+  try {
+    setIsUploading(true);
+
+    const formData = new FormData();
+    formData.append("file", {
+      uri: uri,
+      type: "image/jpeg", // or "image/png"
+      name: "upload.jpg",
+    });
+    formData.append("upload_preset", EXPO_CLOUDINARY_UPLOAD_PRESET);
+
+    const response = await axios.post(EXPO_CLOUDINARY_UPLOAD_URL, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    setUploadedImageUrl(response.data.secure_url);
+    return response.data.secure_url;
+  } catch (error) {
+    console.error("Upload failed:", error);
+    alert("Image upload failed. Please try again.");
+    return null;
+  } finally {
+    setIsUploading(false);
+  }
 };

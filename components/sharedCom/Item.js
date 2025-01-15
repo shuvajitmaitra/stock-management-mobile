@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Colors } from "@/constant/Colors";
 import { formatDate } from "@/utils/commonFunction";
+import ImageView from "react-native-image-viewing";
 
 const Item = ({ item, onDelete, onEdit }) => {
+  const [images, setImages] = useState([]);
   return (
     <View style={styles.itemContainer}>
-      <Image
-        source={item.image ? { uri: item.image } : require("@/assets/images/no_image.jpg")}
-        style={styles.productImage}
-        resizeMode="contain"
-      />
+      <TouchableOpacity onPress={() => setImages([{ uri: item.image }])}>
+        <Image
+          source={item.image ? { uri: item.image } : require("@/assets/images/no_image.jpg")}
+          style={styles.productImage}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
       <View style={styles.itemDetails}>
         <Text style={styles.itemName} numberOfLines={2}>
           {item.name}
@@ -30,6 +34,7 @@ const Item = ({ item, onDelete, onEdit }) => {
           </View>
         </View>
       </View>
+      <ImageView images={images} imageIndex={0} visible={images.length > 0} onRequestClose={() => setImages([])} />
     </View>
   );
 };

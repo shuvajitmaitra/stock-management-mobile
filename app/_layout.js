@@ -4,7 +4,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Tabs } from "expo-router";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { createContext, useContext, useEffect, useState } from "react";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import StockInIcon from "@/assets/icons/StockInIcon"; // Assuming you have a custom icon
 import StockOutIcon from "@/assets/icons/StockOutIcon"; // Assuming you have a custom icon

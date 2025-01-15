@@ -33,7 +33,7 @@ export const StockProvider = ({ children }) => {
       .post("/user", { email, password })
       .then((res) => {
         if (res.data.success && res.data.data) {
-          localStorage.setItem("user", JSON.stringify(res.data.data.user));
+          localStorage.setItem("user", JSON.stringify(res.data.user));
           window.location.href = "/";
         } else {
           localStorage.clear();
@@ -49,8 +49,10 @@ export const StockProvider = ({ children }) => {
     axiosInstance
       .post("/product/add", data)
       .then((res) => {
+        console.log("add product response:", JSON.stringify(res.data, null, 2));
         if (res.data.success && res.data.data) {
-          setProducts((prev) => [res.data.data.product, ...prev]);
+          setProducts((prev) => [res.data.product, ...prev]);
+          setAllProducts((prev) => [res.data.product, ...prev]);
           setAddProductVisible(false);
         }
       })

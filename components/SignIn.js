@@ -1,4 +1,4 @@
-import { storeData } from "@/utils/commonFunction";
+import { saveToStorage, storeData } from "@/utils/commonFunction";
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
 
@@ -9,7 +9,7 @@ const SignInScreen = () => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
-  const validateEmail = (text: string) => {
+  const validateEmail = (text) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(text);
   };
@@ -24,8 +24,8 @@ const SignInScreen = () => {
     if (isEmailValid && isPasswordValid) {
       console.log("email", email);
       console.log("password", password);
-      storeData("email", email);
-      storeData("password", password);
+      saveToStorage("email", email);
+      saveToStorage("password", password);
     } else {
       Alert.alert("Error", "Please fix the errors and try again.");
     }

@@ -6,6 +6,8 @@ import SettingsIcon from "@/assets/icons/SettingsIcon";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderPopup from "@/components/HeaderPopup";
 import { useStock, StockProvider } from "@/context/StockContext";
+import AddStockModal from "@/components/Modal/AddStockModal";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 export default function App() {
   return (
@@ -19,7 +21,7 @@ function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [position, setPosition] = useState(null);
   const { allProducts } = useStock();
-
+  const [addModalVisible, setAddModalVisible] = useState(false);
   const filteredProducts = allProducts?.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const handleDelete = (id) => {
@@ -52,7 +54,8 @@ function Dashboard() {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => <Item item={item} />}
       />
-      {<HeaderPopup position={position} setPosition={setPosition} />}
+      {<HeaderPopup position={position} setPosition={setPosition} addProduct={() => setAddModalVisible(true)} />}
+      <AddStockModal isVisible={addModalVisible} onClose={() => setAddModalVisible(false)} />
     </View>
   );
 }

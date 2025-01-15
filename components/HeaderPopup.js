@@ -5,7 +5,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constant/Colors";
 
-const HeaderPopup = ({ position, setPosition }) => {
+const HeaderPopup = ({ position, setPosition, addProduct }) => {
   console.log("pos", JSON.stringify(position, null, 2));
   // Updated type checking to handle the new position type
 
@@ -21,7 +21,13 @@ const HeaderPopup = ({ position, setPosition }) => {
       }}
     >
       <View style={styles.popoverStyle}>
-        <TouchableOpacity style={styles.stockButton}>
+        <TouchableOpacity
+          onPress={() => {
+            setPosition(null);
+            addProduct();
+          }}
+          style={styles.stockButton}
+        >
           <AntDesign name="plus" size={24} color="white" />
           <Text style={styles.text}>Add Product</Text>
         </TouchableOpacity>
