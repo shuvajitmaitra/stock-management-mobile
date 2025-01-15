@@ -158,6 +158,7 @@ export const StockProvider = ({ children }) => {
   }, []);
 
   const contextValue = {
+    getProducts,
     user,
     products,
     allProducts,

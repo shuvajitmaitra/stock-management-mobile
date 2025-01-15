@@ -7,7 +7,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderPopup from "@/components/HeaderPopup";
 import { useStock, StockProvider } from "@/context/StockContext";
 import AddStockModal from "@/components/Modal/AddStockModal";
-import RBSheet from "react-native-raw-bottom-sheet";
 
 export default function App() {
   return (
@@ -20,7 +19,7 @@ export default function App() {
 function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [position, setPosition] = useState(null);
-  const { allProducts } = useStock();
+  const { products, allProducts, getProducts } = useStock();
   const [addModalVisible, setAddModalVisible] = useState(false);
   const filteredProducts = allProducts?.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -49,6 +48,10 @@ function Dashboard() {
       </View>
 
       <FlatList
+        refreshing={allProducts.length > 0 ? false : true}
+        onRefresh={() => {
+          allProducts === 0 && getProducts();
+        }}
         data={filteredProducts}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         keyExtractor={(item) => item._id}
