@@ -5,7 +5,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constant/Colors";
 
-const HeaderPopup = ({ position, setPosition, addProduct }) => {
+const HeaderPopup = ({ position, setPosition, addProduct, updateStock, signOut }) => {
   return (
     <Popover
       popoverStyle={{
@@ -28,11 +28,23 @@ const HeaderPopup = ({ position, setPosition, addProduct }) => {
           <AntDesign name="plus" size={24} color="white" />
           <Text style={styles.text}>Add Product</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.stockButton}>
+        {/* <TouchableOpacity
+          onPress={() => {
+            updateStock();
+            setPosition(null);
+          }}
+          style={styles.stockButton}
+        >
           <Feather name="edit" size={24} color="white" />
-          <Text style={styles.text}>Edit Product</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.stockButton}>
+          <Text style={styles.text}>Update Stock</Text>
+        </TouchableOpacity> */}
+        <TouchableOpacity
+          onPress={() => {
+            signOut();
+            setPosition(null);
+          }}
+          style={styles.stockButton}
+        >
           <Feather name="log-out" size={24} color={Colors.error} />
           <Text style={[styles.text, { color: Colors.error }]}>Sign Out</Text>
         </TouchableOpacity>

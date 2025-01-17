@@ -40,6 +40,21 @@ export const saveToStorage = async (key, value) => {
   }
 };
 
+export const removeFromStorage = async (key) => {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (error) {
+    console.error("Error removing from storage:", error);
+  }
+};
+
+export const singOut = async () => {
+  try {
+    await AsyncStorage.clear();
+  } catch (error) {
+    console.error("Error clearing storage:", error);
+  }
+};
 export const getFromStorage = async (key) => {
   try {
     const jsonValue = await AsyncStorage.getItem(key);

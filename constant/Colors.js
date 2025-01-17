@@ -12,4 +12,7 @@ export const Colors = {
   header: "#1f2938",
   warning: "#f59e0b",
   error: "#ef4444",
+  bodyText: "#6B7280",
+  heading: "#b3b3b3",
+  borderColor: "#374151",
 };

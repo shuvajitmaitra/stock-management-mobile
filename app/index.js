@@ -5,22 +5,15 @@ import { Colors } from "@/constant/Colors";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderPopup from "@/components/HeaderPopup";
-import { useStock, StockProvider } from "@/context/StockContext";
+import { useStock } from "@/context/StockContext";
 import AddStockModal from "@/components/Modal/AddStockModal";
-
-export default function App() {
-  return (
-    <StockProvider>
-      <Dashboard />
-    </StockProvider>
-  );
-}
-
-function Dashboard() {
+import StockUpdateModal from "@/components/Modal/StockUpdateModal";
+export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [position, setPosition] = useState(null);
-  const { products, handleDeleteProduct, allProducts, getProducts, setSingleProduct } = useStock();
+  const { handleDeleteProduct, allProducts, getProducts, setSingleProduct, handleLogout, singleProduct, handleStockUpdate } = useStock();
   const [addModalVisible, setAddModalVisible] = useState(false);
+  // const [isStockUpdateVisible, setStockUpdateVisible] = useState(false);
   const filteredProducts = allProducts?.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const handleEditProduct = (product) => {
@@ -56,9 +49,27 @@ function Dashboard() {
         data={filteredProducts}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => <Item item={item} onDelete={handleDeleteProduct} onEdit={handleEditProduct} />}
+        renderItem={({ item }) => (
+          <Item
+            item={item}
+            onDelete={handleDeleteProduct}
+            onEdit={handleEditProduct}
+            onUpdate={(item) => {
+              setAddModalVisible(true);
+              setSingleProduct({ ...item, stockUpdate: true });
+            }}
+          />
+        )}
       />
-      {<HeaderPopup position={position} setPosition={setPosition} addProduct={() => setAddModalVisible(true)} />}
+      {
+        <HeaderPopup
+          position={position}
+          setPosition={setPosition}
+          addProduct={() => setAddModalVisible(true)}
+          // updateStock={() => setStockUpdateVisible(true)}
+          signOut={handleLogout}
+        />
+      }
       {addModalVisible && (
         <AddStockModal
           isVisible={addModalVisible}
@@ -68,6 +79,14 @@ function Dashboard() {
           }}
         />
       )}
+      {/* {isStockUpdateVisible && (
+        <StockUpdateModal
+          singleProduct={singleProduct}
+          onStockUpdate={handleStockUpdate}
+          isVisible={isStockUpdateVisible}
+          onClose={() => setStockUpdateVisible(false)}
+        />
+      )} */}
     </View>
   );
 }

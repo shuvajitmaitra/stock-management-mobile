@@ -9,15 +9,18 @@ import { useStock } from "@/context/StockContext";
 import { Colors } from "@/constant/Colors";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Picker } from "@react-native-picker/picker";
 const AddStockModal = ({ isVisible, onClose }) => {
-  const { handleAddProduct, singleProduct, handleEditProduct } = useStock();
+  const { handleAddProduct, singleProduct, handleEditProduct, handleStockUpdate } = useStock();
   const [productName, setProductName] = useState("");
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [stockType, setStockType] = useState("in");
+  const [quantity, setQuantity] = useState(0);
   useEffect(() => {
     if (singleProduct?.name || singleProduct?.image) {
       setProductName(singleProduct?.name);
-      setUploadedImageUrl(singleProduct?.image);
+      !singleProduct?.stockUpdate && setUploadedImageUrl(singleProduct?.image);
     }
   }, []);
 
@@ -64,10 +67,20 @@ const AddStockModal = ({ isVisible, onClose }) => {
     }
 
     try {
-      await handleAddProduct({
-        name: productName,
-        image: uploadedImageUrl,
-      });
+      if (singleProduct.stockUpdate) {
+        await handleStockUpdate({
+          name: productName,
+          _id: singleProduct._id,
+          stockQuantity: quantity,
+          type: stockType,
+          image: uploadedImageUrl,
+        });
+      } else {
+        await handleAddProduct({
+          name: productName,
+          image: uploadedImageUrl,
+        });
+      }
 
       setProductName("");
       setUploadedImageUrl(null);
@@ -112,9 +125,11 @@ const AddStockModal = ({ isVisible, onClose }) => {
     >
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Text style={styles.title}>{singleProduct?._id ? "Update Your Product" : "Add Your Product"}</Text>
+          <Text style={styles.title}>
+            {singleProduct?._id ? (singleProduct?.stockUpdate ? "Update Stock" : "Update Your Product") : "Add Your Product"}
+          </Text>
         </View>
-        <Divider />
+        <Divider mb={0} />
         <Text style={styles.inputLabel}>
           Product Name <RequireIcon />
         </Text>
@@ -124,6 +139,26 @@ const AddStockModal = ({ isVisible, onClose }) => {
           placeholderTextColor="#555"
           value={productName}
           onChangeText={(text) => setProductName(text)}
+          editable={!singleProduct?.stockUpdate}
+          multiline
+        />
+
+        <Text style={styles.inputLabel}>Select type</Text>
+        <View style={styles.pickerContainer}>
+          <Picker style={styles.picker} selectedValue={stockType} onValueChange={(itemValue) => setStockType(itemValue)} mode="dropdown">
+            <Picker.Item style={styles.pickerItem} label="Stock in" value="in" />
+            <Picker.Item style={styles.pickerItem} label="Stock out" value="out" />
+          </Picker>
+        </View>
+
+        <Text style={styles.inputLabel}>Product Quantity</Text>
+        <TextInput
+          style={styles.input}
+          value={quantity}
+          onChangeText={setQuantity}
+          placeholder="Enter quantity..."
+          keyboardType="numeric"
+          placeholderTextColor={Colors.bodyText}
         />
         <Text style={styles.inputLabel}>Add Picture</Text>
 
@@ -137,14 +172,18 @@ const AddStockModal = ({ isVisible, onClose }) => {
         </View>
         {isUploading && <ActivityIndicator color="#FF6F61" size="large" />}
 
-        {(Boolean(singleProduct?.image) || uploadedImageUrl) && (
+        {uploadedImageUrl && (
           <View style={styles.imagePreviewContainer}>
             <Text style={styles.uploadedText}>Product Image</Text>
             <Image source={{ uri: uploadedImageUrl }} style={styles.imagePreview} />
           </View>
         )}
 
-        <TouchableOpacity disabled={isUploading} style={styles.submitButton} onPress={singleProduct ? handleEdit : handleSubmit}>
+        <TouchableOpacity
+          disabled={isUploading}
+          style={styles.submitButton}
+          onPress={singleProduct && !singleProduct?.stockUpdate ? handleEdit : handleSubmit}
+        >
           <Text style={styles.buttonText}>{singleProduct?._id ? "Update Product" : "Add Product"}</Text>
         </TouchableOpacity>
       </View>
@@ -155,6 +194,21 @@ const AddStockModal = ({ isVisible, onClose }) => {
 export default AddStockModal;
 
 const styles = StyleSheet.create({
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: Colors.borderColor,
+    borderRadius: 5,
+    overflow: "hidden",
+  },
+  picker: {
+    // Add any custom styles if needed
+  },
+  pickerItem: {
+    flex: 1,
+    color: Colors.bodyText,
+    backgroundColor: Colors.primary,
+    padding: 0,
+  },
   modalStyle: {
     justifyContent: "flex-end",
     margin: 0,
@@ -185,18 +239,19 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 14,
-    color: "#555",
+    color: Colors.heading,
     marginBottom: 5,
+    fontWeight: "bold",
+    marginTop: 15,
   },
   input: {
     width: "100%",
-    height: 45,
-    borderColor: Colors.secondary,
+    minHeight: 45,
+    borderColor: Colors.borderColor,
     borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 15,
     backgroundColor: Colors.primary,
-    marginBottom: 15,
     color: Colors.white,
   },
   buttonContainer: {

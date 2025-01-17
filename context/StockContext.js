@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axiosInstance from "../constant/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { singOut } from "@/utils/commonFunction";
 const StockContext = createContext(undefined);
 
 // Custom hook for consuming the context
@@ -64,13 +65,17 @@ export const StockProvider = ({ children }) => {
   };
 
   const handleStockUpdate = (product) => {
+    console.log("product", JSON.stringify(product, null, 2));
+    console.log("user.email", JSON.stringify(user.email, null, 2));
+    console.log("new Date()", JSON.stringify(new Date(), null, 2));
     axiosInstance
       .patch(`/product/product-update/${product._id}`, {
         ...product,
         date: new Date(),
-        userEmail: user?.email,
+        userEmail: "shuvajitmaitra@gmail.com",
       })
       .then((res) => {
+        console.log("update stock", JSON.stringify(res.data, null, 2));
         const { history, product: updatedProduct } = res.data;
         if (history.type === "in") {
           setStockIn((prev) => [history, ...prev]);
@@ -80,7 +85,9 @@ export const StockProvider = ({ children }) => {
         setProducts((prev) => prev.map((item) => (item._id === updatedProduct._id ? updatedProduct : item)));
         setSTUVisible(false);
       })
-      .catch((err) => console.error("Error updating stock:", err));
+      .catch((err) => {
+        console.log("err.response", JSON.stringify(err.response, null, 2));
+      });
   };
   const handleEditProduct = (product) => {
     if (!product.name.trim()) {
@@ -134,7 +141,7 @@ export const StockProvider = ({ children }) => {
     axiosInstance
       .get("/product/all-products")
       .then((res) => {
-        // console.log("res.data", JSON.stringify(res.data, null, 2));
+        console.log("res.data", JSON.stringify(res.data, null, 2));
         if (res.data.success) {
           setProducts(res.data.products);
           setAllProducts(res.data.products);
@@ -178,8 +185,14 @@ export const StockProvider = ({ children }) => {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
-    window.location.href = "/login";
+    singOut();
+    setProducts([]);
+    setStockIn([]);
+    setStockOut([]);
+    setAllProducts([]);
+    setSingleProduct(null);
+    setAddProductVisible(false);
+    setSTUVisible(false);
   };
 
   useEffect(() => {
