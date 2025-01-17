@@ -117,7 +117,7 @@ const AddStockModal = ({ isVisible, onClose }) => {
           </View>
         )}
 
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+        <TouchableOpacity disabled={isUploading} style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Add Product</Text>
         </TouchableOpacity>
       </View>
