@@ -10,7 +10,7 @@ import { Colors } from "@/constant/Colors";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Picker } from "@react-native-picker/picker";
-const AddStockModal = ({ isVisible, onClose }) => {
+const StockModal = ({ isVisible, onClose }) => {
   const { handleAddProduct, singleProduct, handleEditProduct, handleStockUpdate } = useStock();
   const [productName, setProductName] = useState("");
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
@@ -191,7 +191,7 @@ const AddStockModal = ({ isVisible, onClose }) => {
   );
 };
 
-export default AddStockModal;
+export default StockModal;
 
 const styles = StyleSheet.create({
   pickerContainer: {

@@ -6,14 +6,13 @@ import SettingsIcon from "@/assets/icons/SettingsIcon";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderPopup from "@/components/HeaderPopup";
 import { useStock } from "@/context/StockContext";
-import AddStockModal from "@/components/Modal/AddStockModal";
+import StockModal from "@/components/Modal/StockModal";
 import StockUpdateModal from "@/components/Modal/StockUpdateModal";
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [position, setPosition] = useState(null);
-  const { handleDeleteProduct, allProducts, getProducts, setSingleProduct, handleLogout, singleProduct, handleStockUpdate } = useStock();
+  const { handleDeleteProduct, allProducts, getProducts, setSingleProduct, handleLogout } = useStock();
   const [addModalVisible, setAddModalVisible] = useState(false);
-  // const [isStockUpdateVisible, setStockUpdateVisible] = useState(false);
   const filteredProducts = allProducts?.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const handleEditProduct = (product) => {
@@ -61,17 +60,9 @@ export default function Dashboard() {
           />
         )}
       />
-      {
-        <HeaderPopup
-          position={position}
-          setPosition={setPosition}
-          addProduct={() => setAddModalVisible(true)}
-          // updateStock={() => setStockUpdateVisible(true)}
-          signOut={handleLogout}
-        />
-      }
+      {<HeaderPopup position={position} setPosition={setPosition} addProduct={() => setAddModalVisible(true)} signOut={handleLogout} />}
       {addModalVisible && (
-        <AddStockModal
+        <StockModal
           isVisible={addModalVisible}
           onClose={() => {
             setAddModalVisible(false);
