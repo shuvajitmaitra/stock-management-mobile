@@ -50,6 +50,7 @@ export default function Dashboard() {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <Item
+            from={"dashboard"}
             item={item}
             onDelete={handleDeleteProduct}
             onEdit={handleEditProduct}

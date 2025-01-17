@@ -171,26 +171,31 @@ export const StockProvider = ({ children }) => {
   };
 
   const handleDeleteHistory = (stock) => {
+    console.log("stock", JSON.stringify(stock, null, 2));
+    setProducts((prev) => {
+      const updatedProducts = [...prev];
+      const productIndex = updatedProducts.findIndex((item) => item._id === stock.productId);
+      if (productIndex !== -1) {
+        updatedProducts[productIndex].stockQuantity += stock.type === "in" ? -stock.stockQuantity : stock.stockQuantity;
+      }
+      return updatedProducts;
+    });
+    if (stock.type === "in") {
+      setStockIn((prev) => prev.filter((item) => item._id !== stock._id));
+    } else {
+      setStockOut((prev) => prev.filter((item) => item._id !== stock._id));
+    }
     axiosInstance
       .delete(`/history/history-delete/${stock._id}`)
       .then((res) => {
         if (res.data.success) {
-          setProducts((prev) => {
-            const updatedProducts = [...prev];
-            const productIndex = updatedProducts.findIndex((item) => item._id === stock.productId);
-            if (productIndex !== -1) {
-              updatedProducts[productIndex].stockQuantity += stock.type === "in" ? -stock.stockQuantity : stock.stockQuantity;
-            }
-            return updatedProducts;
-          });
-          if (stock.type === "in") {
-            setStockIn((prev) => prev.filter((item) => item._id !== stock._id));
-          } else {
-            setStockOut((prev) => prev.filter((item) => item._id !== stock._id));
-          }
+          getHistories();
         }
       })
-      .catch((err) => console.error("Error deleting history:", err));
+      .catch((err) => {
+        console.error("Error deleting history:", err);
+        getHistories();
+      });
   };
 
   const getProducts = () => {
@@ -224,7 +229,8 @@ export const StockProvider = ({ children }) => {
       .catch((error) => console.error("Error fetching histories:", error));
   };
 
-  const handleDeleteProduct = (id) => {
+  const handleDeleteProduct = (product) => {
+    const id = product._id;
     setProducts((prev) => prev.filter((item) => item._id !== id));
     setAllProducts((prev) => prev.filter((item) => item._id !== id));
     axiosInstance

@@ -7,7 +7,7 @@ import ImageView from "react-native-image-viewing";
 import Feather from "@expo/vector-icons/Feather";
 import Foundation from "@expo/vector-icons/Foundation";
 
-const Item = ({ item, onDelete, onEdit, onUpdate }) => {
+const Item = ({ item, onDelete, onEdit, onUpdate, from = null }) => {
   const [images, setImages] = useState([]);
 
   return (
@@ -30,15 +30,21 @@ const Item = ({ item, onDelete, onEdit, onUpdate }) => {
         <View style={styles.bottomContainer}>
           <Text style={styles.updateText}>{formatDate(item?.date)}</Text>
           <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={styles.actionButton} onPress={() => onUpdate && onUpdate(item)}>
-              <Feather name="edit" size={20} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton} onPress={() => onEdit && onEdit(item)}>
-              <Foundation name="page-edit" size={20} color="#4ecdc4" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton} onPress={() => onDelete && onDelete(item._id)}>
-              <MaterialIcons name="delete" size={20} color="#ff6b6b" />
-            </TouchableOpacity>
+            {from && (
+              <>
+                <TouchableOpacity style={styles.actionButton} onPress={() => onUpdate && onUpdate(item)}>
+                  <Feather name="edit" size={20} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionButton} onPress={() => onEdit && onEdit(item)}>
+                  <Foundation name="page-edit" size={20} color="#4ecdc4" />
+                </TouchableOpacity>
+              </>
+            )}
+            {
+              <TouchableOpacity disabled={!from && !item.productId} style={styles.actionButton} onPress={() => onDelete && onDelete(item)}>
+                <MaterialIcons name="delete" size={20} color={!from && !item.productId ? "#a0a0a0" : "#ff6b6b"} />
+              </TouchableOpacity>
+            }
           </View>
         </View>
       </View>
