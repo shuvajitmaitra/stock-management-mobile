@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator, Alert } from "react-native";
 import ReactNativeModal from "react-native-modal";
 import * as ImagePicker from "expo-image-picker";
@@ -10,10 +10,16 @@ import { Colors } from "@/constant/Colors";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 const AddStockModal = ({ isVisible, onClose }) => {
-  const { handleAddProduct } = useStock();
+  const { handleAddProduct, singleProduct, handleEditProduct } = useStock();
   const [productName, setProductName] = useState("");
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  useEffect(() => {
+    if (singleProduct?.name || singleProduct?.image) {
+      setProductName(singleProduct?.name);
+      setUploadedImageUrl(singleProduct?.image);
+    }
+  }, []);
 
   const openCamera = async () => {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -71,6 +77,27 @@ const AddStockModal = ({ isVisible, onClose }) => {
     }
   };
 
+  const handleEdit = async () => {
+    if (!productName.trim()) {
+      Alert.alert("Validation Error", "Product name is required");
+      return;
+    }
+
+    try {
+      await handleEditProduct({
+        name: productName,
+        image: uploadedImageUrl,
+        _id: singleProduct?._id,
+      });
+
+      setProductName("");
+      setUploadedImageUrl(null);
+      onClose();
+    } catch (error) {
+      Alert.alert("Error", "Could not update product. Please try again.");
+    }
+  };
+
   return (
     <ReactNativeModal
       animationType="slide"
@@ -85,7 +112,7 @@ const AddStockModal = ({ isVisible, onClose }) => {
     >
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Text style={styles.title}>Add Your Product</Text>
+          <Text style={styles.title}>{singleProduct?._id ? "Update Your Product" : "Add Your Product"}</Text>
         </View>
         <Divider />
         <Text style={styles.inputLabel}>
@@ -110,15 +137,15 @@ const AddStockModal = ({ isVisible, onClose }) => {
         </View>
         {isUploading && <ActivityIndicator color="#FF6F61" size="large" />}
 
-        {uploadedImageUrl && (
+        {(Boolean(singleProduct?.image) || uploadedImageUrl) && (
           <View style={styles.imagePreviewContainer}>
             <Text style={styles.uploadedText}>Product Image</Text>
             <Image source={{ uri: uploadedImageUrl }} style={styles.imagePreview} />
           </View>
         )}
 
-        <TouchableOpacity disabled={isUploading} style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Add Product</Text>
+        <TouchableOpacity disabled={isUploading} style={styles.submitButton} onPress={singleProduct ? handleEdit : handleSubmit}>
+          <Text style={styles.buttonText}>{singleProduct?._id ? "Update Product" : "Add Product"}</Text>
         </TouchableOpacity>
       </View>
     </ReactNativeModal>

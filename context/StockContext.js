@@ -18,6 +18,7 @@ export const StockProvider = ({ children }) => {
   const [stockOut, setStockOut] = useState([]);
   const [products, setProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
+  const [singleProduct, setSingleProduct] = useState(null);
   const [addProductVisible, setAddProductVisible] = useState(false);
   const [sTUVisible, setSTUVisible] = useState(false);
 
@@ -81,6 +82,30 @@ export const StockProvider = ({ children }) => {
       })
       .catch((err) => console.error("Error updating stock:", err));
   };
+  const handleEditProduct = (product) => {
+    if (!product.name.trim()) {
+      Alert.alert("Validation Error", "Product name is required");
+      return;
+    }
+    const productIndex = products.findIndex((item) => item._id === product._id);
+    if (productIndex !== -1) {
+      products[productIndex] = { ...products[productIndex], ...product };
+    }
+    axiosInstance
+      .patch(`/product/product-edit/${product._id}`, {
+        ...product,
+      })
+      .then((res) => {
+        if (res.data.success) {
+          // console.log("product edit", JSON.stringify(res.data, null, 2));
+          getProducts();
+        }
+      })
+      .catch((err) => {
+        getProducts();
+        console.log("err.response", JSON.stringify(err.response, null, 2));
+      });
+  };
 
   const handleDeleteHistory = (stock) => {
     axiosInstance
@@ -109,7 +134,7 @@ export const StockProvider = ({ children }) => {
     axiosInstance
       .get("/product/all-products")
       .then((res) => {
-        console.log("res.data", JSON.stringify(res.data, null, 2));
+        // console.log("res.data", JSON.stringify(res.data, null, 2));
         if (res.data.success) {
           setProducts(res.data.products);
           setAllProducts(res.data.products);
@@ -127,7 +152,7 @@ export const StockProvider = ({ children }) => {
     axiosInstance
       .get("/history/all-histories")
       .then((res) => {
-        console.log("histories", JSON.stringify(res.data, null, 2));
+        // console.log("histories", JSON.stringify(res.data, null, 2));
         if (res.data.success) {
           setStockIn(res.data.stockIn);
           setStockOut(res.data.stockOut);
@@ -165,6 +190,7 @@ export const StockProvider = ({ children }) => {
   }, []);
 
   const contextValue = {
+    handleEditProduct,
     getProducts,
     user,
     products,
@@ -183,6 +209,8 @@ export const StockProvider = ({ children }) => {
     handleDeleteHistory,
     handleDeleteProduct,
     handleSearchProduct,
+    singleProduct,
+    setSingleProduct,
   };
 
   return <StockContext.Provider value={contextValue}>{children}</StockContext.Provider>;

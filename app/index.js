@@ -19,9 +19,15 @@ export default function App() {
 function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [position, setPosition] = useState(null);
-  const { products, handleDeleteProduct, allProducts, getProducts } = useStock();
+  const { products, handleDeleteProduct, allProducts, getProducts, setSingleProduct } = useStock();
   const [addModalVisible, setAddModalVisible] = useState(false);
   const filteredProducts = allProducts?.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  const handleEditProduct = (product) => {
+    setSingleProduct(product);
+    setPosition(null);
+    setAddModalVisible(true);
+  };
 
   const { top } = useSafeAreaInsets();
   return (
@@ -50,10 +56,18 @@ function Dashboard() {
         data={filteredProducts}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => <Item item={item} onDelete={handleDeleteProduct} />}
+        renderItem={({ item }) => <Item item={item} onDelete={handleDeleteProduct} onEdit={handleEditProduct} />}
       />
       {<HeaderPopup position={position} setPosition={setPosition} addProduct={() => setAddModalVisible(true)} />}
-      {addModalVisible && <AddStockModal isVisible={addModalVisible} onClose={() => setAddModalVisible(false)} />}
+      {addModalVisible && (
+        <AddStockModal
+          isVisible={addModalVisible}
+          onClose={() => {
+            setAddModalVisible(false);
+            setSingleProduct(null);
+          }}
+        />
+      )}
     </View>
   );
 }
