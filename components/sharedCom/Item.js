@@ -21,7 +21,7 @@ const Item = ({ item, onDelete, onEdit }) => {
           {item.name}
         </Text>
         <View style={styles.itemMetadata}>
-          <Text style={styles.quantityText}>Qty: {item.stockQuantity}</Text>
+          <Text style={styles.quantityText}>Qty: {item?.stockQuantity || 0}</Text>
           <View style={{ flex: 1 }} />
           <Text style={styles.updateText}>{formatDate(item?.date)}</Text>
           <View style={styles.buttonContainer}>

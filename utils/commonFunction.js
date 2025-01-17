@@ -98,9 +98,9 @@ export const uploadImageToCloudinary = async (uri, setIsUploading, setUploadedIm
       type: "image/jpeg", // or "image/png"
       name: "upload.jpg",
     });
-    formData.append("upload_preset", "pulse_tech_preset");
+    formData.append("upload_preset", `${process.env.EXPO_PUBLIC_CLOUDINARY_UPLOAD_PRESET}`);
 
-    const response = await axios.post("https://api.cloudinary.com/v1_1/dbzdkcxdh/image/upload", formData, {
+    const response = await axios.post(`${process.env.EXPO_PUBLIC_CLOUDINARY_UPLOAD_URL}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 

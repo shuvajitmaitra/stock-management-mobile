@@ -30,9 +30,9 @@ export const StockProvider = ({ children }) => {
     const password = e.currentTarget.password.value;
 
     axiosInstance
-      .post("/user", { email, password })
+      .post("/user/login", { email, password })
       .then((res) => {
-        if (res.data.success && res.data.data) {
+        if (res.data.success) {
           localStorage.setItem("user", JSON.stringify(res.data.user));
           window.location.href = "/";
         } else {
@@ -47,10 +47,10 @@ export const StockProvider = ({ children }) => {
 
   const handleAddProduct = (data) => {
     axiosInstance
-      .post("/product/add", data)
+      .post("/product/product-add", data)
       .then((res) => {
-        console.log("add product response:", JSON.stringify(res.data, null, 2));
-        if (res.data.success && res.data.data) {
+        console.log("add product response:", JSON.stringify(res.data.product, null, 2));
+        if (res.data.success) {
           setProducts((prev) => [res.data.product, ...prev]);
           setAllProducts((prev) => [res.data.product, ...prev]);
           setAddProductVisible(false);
@@ -61,13 +61,13 @@ export const StockProvider = ({ children }) => {
 
   const handleStockUpdate = (product) => {
     axiosInstance
-      .patch(`/product/update/${product._id}`, {
+      .patch(`/product/product-update/${product._id}`, {
         ...product,
         date: new Date(),
         userEmail: user?.email,
       })
       .then((res) => {
-        const { history, product: updatedProduct } = res.data.data;
+        const { history, product: updatedProduct } = res.data;
         if (history.type === "in") {
           setStockIn((prev) => [history, ...prev]);
         } else {
@@ -81,7 +81,7 @@ export const StockProvider = ({ children }) => {
 
   const handleDeleteHistory = (stock) => {
     axiosInstance
-      .delete(`/history/delete/${stock._id}`)
+      .delete(`/history/history-delete/${stock._id}`)
       .then((res) => {
         if (res.data.success) {
           setProducts((prev) => {
@@ -104,7 +104,7 @@ export const StockProvider = ({ children }) => {
 
   const getProducts = () => {
     axiosInstance
-      .get("/products")
+      .get("/product/all-products")
       .then((res) => {
         console.log("res.data", JSON.stringify(res.data, null, 2));
         if (res.data.success) {
@@ -122,7 +122,7 @@ export const StockProvider = ({ children }) => {
 
   const getHistories = () => {
     axiosInstance
-      .get("/histories")
+      .get("/history/all-histories")
       .then((res) => {
         console.log("histories", JSON.stringify(res.data, null, 2));
         if (res.data.success) {

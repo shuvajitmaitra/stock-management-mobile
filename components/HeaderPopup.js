@@ -6,9 +6,6 @@ import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constant/Colors";
 
 const HeaderPopup = ({ position, setPosition, addProduct }) => {
-  console.log("pos", JSON.stringify(position, null, 2));
-  // Updated type checking to handle the new position type
-
   return (
     <Popover
       popoverStyle={{
