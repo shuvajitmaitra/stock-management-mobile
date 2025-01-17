@@ -43,7 +43,7 @@ export default function Dashboard() {
       <FlatList
         refreshing={allProducts.length > 0 ? false : true}
         onRefresh={() => {
-          allProducts === 0 && getProducts();
+          getProducts();
         }}
         data={filteredProducts}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}

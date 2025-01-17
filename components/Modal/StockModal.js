@@ -16,7 +16,7 @@ const StockModal = ({ isVisible, onClose }) => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [stockType, setStockType] = useState("in");
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(10);
   useEffect(() => {
     if (singleProduct?.name || singleProduct?.image) {
       setProductName(singleProduct?.name);
@@ -67,7 +67,8 @@ const StockModal = ({ isVisible, onClose }) => {
     }
 
     try {
-      if (singleProduct.stockUpdate) {
+      if (singleProduct?.stockUpdate) {
+        console.log("singleProduct ", JSON.stringify(singleProduct, null, 2));
         await handleStockUpdate({
           name: productName,
           _id: singleProduct._id,
@@ -75,18 +76,21 @@ const StockModal = ({ isVisible, onClose }) => {
           type: stockType,
           image: uploadedImageUrl,
         });
+        setProductName("");
+        setUploadedImageUrl(null);
+        onClose();
       } else {
         await handleAddProduct({
           name: productName,
           image: uploadedImageUrl,
         });
+        setProductName("");
+        setUploadedImageUrl(null);
+        onClose();
       }
-
-      setProductName("");
-      setUploadedImageUrl(null);
-      onClose();
     } catch (error) {
-      Alert.alert("Error", "Could not add product. Please try again.");
+      console.log("error", JSON.stringify(error, null, 2));
+      // Alert.alert("Error", "Could not add product. Please try again.");
     }
   };
 
@@ -142,24 +146,35 @@ const StockModal = ({ isVisible, onClose }) => {
           editable={!singleProduct?.stockUpdate}
           multiline
         />
-
-        <Text style={styles.inputLabel}>Select type</Text>
-        <View style={styles.pickerContainer}>
-          <Picker style={styles.picker} selectedValue={stockType} onValueChange={(itemValue) => setStockType(itemValue)} mode="dropdown">
-            <Picker.Item style={styles.pickerItem} label="Stock in" value="in" />
-            <Picker.Item style={styles.pickerItem} label="Stock out" value="out" />
-          </Picker>
-        </View>
-
-        <Text style={styles.inputLabel}>Product Quantity</Text>
-        <TextInput
-          style={styles.input}
-          value={quantity}
-          onChangeText={setQuantity}
-          placeholder="Enter quantity..."
-          keyboardType="numeric"
-          placeholderTextColor={Colors.bodyText}
-        />
+        {singleProduct?.stockUpdate && (
+          <>
+            <Text style={styles.inputLabel}>Select type</Text>
+            <View style={styles.pickerContainer}>
+              <Picker
+                style={styles.picker}
+                selectedValue={stockType}
+                onValueChange={(itemValue) => setStockType(itemValue)}
+                mode="dropdown"
+              >
+                <Picker.Item style={styles.pickerItem} label="Stock in" value="in" />
+                <Picker.Item style={styles.pickerItem} label="Stock out" value="out" />
+              </Picker>
+            </View>
+          </>
+        )}
+        {singleProduct?.stockUpdate && (
+          <>
+            <Text style={styles.inputLabel}>Product Quantity</Text>
+            <TextInput
+              style={styles.input}
+              value={quantity}
+              onChangeText={setQuantity}
+              placeholder="Enter quantity..."
+              keyboardType="numeric"
+              placeholderTextColor={Colors.bodyText}
+            />
+          </>
+        )}
         <Text style={styles.inputLabel}>Add Picture</Text>
 
         <View style={styles.buttonContainer}>

@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import axiosInstance from "../constant/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { singOut } from "@/utils/commonFunction";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 const StockContext = createContext(undefined);
 
 // Custom hook for consuming the context
@@ -66,8 +67,64 @@ export const StockProvider = ({ children }) => {
 
   const handleStockUpdate = (product) => {
     console.log("product", JSON.stringify(product, null, 2));
-    console.log("user.email", JSON.stringify(user.email, null, 2));
-    console.log("new Date()", JSON.stringify(new Date(), null, 2));
+    let updatedProduct;
+    if (product?.type === "in") {
+      setStockIn((prev) => [
+        {
+          ...product,
+          productId: product._id,
+          _id: Math.random().toString(36),
+          user: {
+            fullName: user.fullName || "Shuvo",
+          },
+        },
+        ...prev,
+      ]);
+    } else {
+      setStockOut((prev) => [
+        {
+          ...product,
+          productId: product._id,
+          _id: Math.random().toString(36),
+          user: {
+            fullName: user.fullName || "Shuvo",
+          },
+        },
+        ...prev,
+      ]);
+    }
+    setProducts((prev) =>
+      prev.map((item) =>
+        item._id === product._id
+          ? product.type === "in"
+            ? {
+                ...item,
+                stockQuantity: parseInt(item.stockQuantity) + parseInt(product.stockQuantity),
+              }
+            : {
+                ...item,
+                stockQuantity: parseInt(item.stockQuantity) - parseInt(product.stockQuantity),
+              }
+          : item
+      )
+    );
+
+    setAllProducts((prev) =>
+      prev.map((item) =>
+        item._id === product._id
+          ? product.type === "in"
+            ? {
+                ...item,
+                stockQuantity: parseInt(item.stockQuantity) + parseInt(product.stockQuantity),
+              }
+            : {
+                ...item,
+                stockQuantity: parseInt(item.stockQuantity) - parseInt(product.stockQuantity),
+              }
+          : item
+      )
+    );
+
     axiosInstance
       .patch(`/product/product-update/${product._id}`, {
         ...product,
@@ -77,16 +134,15 @@ export const StockProvider = ({ children }) => {
       .then((res) => {
         console.log("update stock", JSON.stringify(res.data, null, 2));
         const { history, product: updatedProduct } = res.data;
-        if (history.type === "in") {
-          setStockIn((prev) => [history, ...prev]);
-        } else {
-          setStockOut((prev) => [history, ...prev]);
+        if (res.data.success) {
+          getProducts();
+          getHistories();
         }
-        setProducts((prev) => prev.map((item) => (item._id === updatedProduct._id ? updatedProduct : item)));
-        setSTUVisible(false);
       })
       .catch((err) => {
         console.log("err.response", JSON.stringify(err.response, null, 2));
+        getProducts();
+        getHistories();
       });
   };
   const handleEditProduct = (product) => {
