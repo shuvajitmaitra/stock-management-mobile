@@ -46,7 +46,6 @@ function Dashboard() {
           <SettingsIcon size={30} color="white" />
         </TouchableOpacity>
       </View>
-
       <FlatList
         refreshing={allProducts.length > 0 ? false : true}
         onRefresh={() => {
@@ -58,7 +57,7 @@ function Dashboard() {
         renderItem={({ item }) => <Item item={item} />}
       />
       {<HeaderPopup position={position} setPosition={setPosition} addProduct={() => setAddModalVisible(true)} />}
-      <AddStockModal isVisible={addModalVisible} onClose={() => setAddModalVisible(false)} />
+      {addModalVisible && <AddStockModal isVisible={addModalVisible} onClose={() => setAddModalVisible(false)} />}
     </View>
   );
 }
