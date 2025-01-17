@@ -25,10 +25,10 @@ const Item = ({ item, onDelete, onEdit }) => {
           <View style={{ flex: 1 }} />
           <Text style={styles.updateText}>{formatDate(item?.date)}</Text>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.editButton} onPress={() => onEdit && onEdit(item.id)}>
+            <TouchableOpacity style={styles.editButton} onPress={() => onEdit && onEdit(item._id)}>
               <MaterialIcons name="edit" size={24} color="#4ecdc4" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteButton} onPress={() => onDelete && onDelete(item.id)}>
+            <TouchableOpacity style={styles.deleteButton} onPress={() => onDelete && onDelete(item._id)}>
               <MaterialIcons name="delete" size={24} color="#ff6b6b" />
             </TouchableOpacity>
           </View>

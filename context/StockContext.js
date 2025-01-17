@@ -34,7 +34,6 @@ export const StockProvider = ({ children }) => {
       .then((res) => {
         if (res.data.success) {
           localStorage.setItem("user", JSON.stringify(res.data.user));
-          window.location.href = "/";
         } else {
           localStorage.clear();
         }
@@ -46,17 +45,21 @@ export const StockProvider = ({ children }) => {
   };
 
   const handleAddProduct = (data) => {
+    const newProduct = { ...data, date: new Date(), stockQuantity: 0, _id: Math.random().toString(36) };
+    setProducts((prev) => [newProduct, ...prev]);
+    setAllProducts((prev) => [newProduct, ...prev]);
+    setAddProductVisible(false);
     axiosInstance
       .post("/product/product-add", data)
       .then((res) => {
-        console.log("add product response:", JSON.stringify(res.data.product, null, 2));
         if (res.data.success) {
-          setProducts((prev) => [res.data.product, ...prev]);
-          setAllProducts((prev) => [res.data.product, ...prev]);
-          setAddProductVisible(false);
+          getProducts();
         }
       })
-      .catch((err) => console.error("Error adding product:", err));
+      .catch((err) => {
+        console.error("Error adding product:", err.response);
+        getProducts();
+      });
   };
 
   const handleStockUpdate = (product) => {
@@ -134,15 +137,19 @@ export const StockProvider = ({ children }) => {
   };
 
   const handleDeleteProduct = (id) => {
+    setProducts((prev) => prev.filter((item) => item._id !== id));
+    setAllProducts((prev) => prev.filter((item) => item._id !== id));
     axiosInstance
-      .delete(`/product/delete/${id}`)
+      .delete(`/product/product-delete/${id}`)
       .then((res) => {
         if (res.data.success) {
-          setProducts((prev) => prev.filter((item) => item._id !== id));
-          setAllProducts((prev) => prev.filter((item) => item._id !== id));
+          getProducts();
         }
       })
-      .catch((err) => console.error("Error deleting product:", err));
+      .catch((err) => {
+        console.error("Error deleting product:", err.response);
+        getProducts();
+      });
   };
 
   const handleLogout = () => {
