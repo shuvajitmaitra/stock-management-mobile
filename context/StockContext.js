@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axiosInstance from "../constant/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { singOut } from "@/utils/commonFunction";
+import { saveObject, singOut } from "@/utils/commonFunction";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 const StockContext = createContext(undefined);
 
@@ -24,26 +24,23 @@ export const StockProvider = ({ children }) => {
   const [addProductVisible, setAddProductVisible] = useState(false);
   const [sTUVisible, setSTUVisible] = useState(false);
 
-  // Retrieve the logged-in user from local storage
   const user = AsyncStorage.getItem("email");
 
-  const handleUserLogin = (e) => {
-    e.preventDefault();
-    const email = e.currentTarget.email.value;
-    const password = e.currentTarget.password.value;
-
+  const handleUserLogin = (email, password) => {
+    console.log("email", JSON.stringify(email, null, 2));
+    console.log("password", JSON.stringify(password, null, 2));
     axiosInstance
       .post("/user/login", { email, password })
       .then((res) => {
         if (res.data.success) {
-          localStorage.setItem("user", JSON.stringify(res.data.user));
+          saveObject("user", res.data.user);
         } else {
-          localStorage.clear();
+          singOut();
         }
       })
       .catch((error) => {
         console.error("Login error:", error);
-        localStorage.clear();
+        singOut();
       });
   };
 
@@ -66,8 +63,7 @@ export const StockProvider = ({ children }) => {
   };
 
   const handleStockUpdate = (product) => {
-    console.log("product", JSON.stringify(product, null, 2));
-    let updatedProduct;
+    // console.log("product", JSON.stringify(product, null, 2));
     if (product?.type === "in") {
       setStockIn((prev) => [
         {
@@ -171,7 +167,7 @@ export const StockProvider = ({ children }) => {
   };
 
   const handleDeleteHistory = (stock) => {
-    console.log("stock", JSON.stringify(stock, null, 2));
+    // console.log("stock", JSON.stringify(stock, null, 2));
     setProducts((prev) => {
       const updatedProducts = [...prev];
       const productIndex = updatedProducts.findIndex((item) => item._id === stock.productId);
@@ -202,7 +198,7 @@ export const StockProvider = ({ children }) => {
     axiosInstance
       .get("/product/all-products")
       .then((res) => {
-        console.log("res.data", JSON.stringify(res.data, null, 2));
+        // console.log("res.data", JSON.stringify(res.data, null, 2));
         if (res.data.success) {
           setProducts(res.data.products);
           setAllProducts(res.data.products);

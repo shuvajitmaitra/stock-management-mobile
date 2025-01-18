@@ -1,3 +1,4 @@
+import { useStock } from "@/context/StockContext";
 import { saveToStorage, storeData } from "@/utils/commonFunction";
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
@@ -8,6 +9,10 @@ const SignInScreen = () => {
   const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  console.log("email", JSON.stringify(email, null, 2));
+  console.log("password", JSON.stringify(password, null, 2));
+
+  const { handleUserLogin } = useStock();
 
   const validateEmail = (text) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -15,6 +20,7 @@ const SignInScreen = () => {
   };
 
   const handleSignIn = () => {
+    handleUserLogin(email, password);
     const isEmailValid = validateEmail(email);
     const isPasswordValid = password.length >= 6;
 
@@ -22,10 +28,6 @@ const SignInScreen = () => {
     setPasswordError(!isPasswordValid);
 
     if (isEmailValid && isPasswordValid) {
-      console.log("email", email);
-      console.log("password", password);
-      saveToStorage("email", email);
-      saveToStorage("password", password);
     } else {
       Alert.alert("Error", "Please fix the errors and try again.");
     }

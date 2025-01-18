@@ -40,6 +40,15 @@ export const saveToStorage = async (key, value) => {
   }
 };
 
+export const saveObject = async (key, obj) => {
+  try {
+    await AsyncStorage.setItem(key, JSON.stringify(obj));
+    console.log("Object saved successfully!");
+  } catch (error) {
+    console.error("Error saving object", error);
+  }
+};
+
 export const removeFromStorage = async (key) => {
   try {
     await AsyncStorage.removeItem(key);
