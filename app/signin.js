@@ -36,10 +36,11 @@ const SignInScreen = () => {
             router.push("/(tabs)");
             saveObject("user", res.data.user);
           } else {
-            singOut();
+            Alert.alert("Error", "Invalid email or password");
           }
         })
         .catch((error) => {
+          router.push("/signin");
           console.error("Login error:", error.response);
           singOut();
         });
