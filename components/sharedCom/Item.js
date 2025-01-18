@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     alignItems: "center",
-    marginVertical: 6,
     paddingRight: 0,
   },
   productImage: {

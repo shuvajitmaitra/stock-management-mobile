@@ -1,11 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ImageBackground, StatusBar, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
-import { Link, Stack } from "expo-router";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+import { Link, router, Stack } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { height } = Dimensions.get("window");
 
 const WelcomeScreen = () => {
+  const getUser = async () => {
+    try {
+      const userData = await AsyncStorage.getItem("user");
+
+      if (userData !== null) {
+        const userObject = JSON.parse(userData);
+        return userObject;
+      } else {
+        console.log("No user data found in AsyncStorage.");
+        return null; // Return null if no data is found
+      }
+    } catch (error) {
+      console.error("Error retrieving data", error);
+      return null; // Return null in case of an error
+    }
+  };
+
+  useEffect(() => {
+    getUser().then((user) => {
+      if (user) {
+        router.dismissAll();
+        router.push("/(tabs)");
+      }
+    });
+  }, []);
+
   return (
     <>
       <Stack.Screen name="index" options={{ headerShown: false }} />

@@ -23,7 +23,7 @@ export default function Dashboard() {
 
   const { top } = useSafeAreaInsets();
   return (
-    <View style={[styles.container, { paddingTop: top }]}>
+    <View style={[styles.container, { paddingTop: top + 10 }]}>
       <StatusBar backgroundColor={Colors.header} barStyle="light-content" />
       <View style={styles.buttonContainer}>
         <TextInput
