@@ -3,6 +3,7 @@ import axiosInstance from "../constant/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { saveObject, singOut } from "@/utils/commonFunction";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { router } from "expo-router";
 const StockContext = createContext(undefined);
 
 // Custom hook for consuming the context
@@ -33,13 +34,14 @@ export const StockProvider = ({ children }) => {
       .post("/user/login", { email, password })
       .then((res) => {
         if (res.data.success) {
+          // router.replace("/dashboard");
           saveObject("user", res.data.user);
         } else {
           singOut();
         }
       })
       .catch((error) => {
-        console.error("Login error:", error);
+        console.error("Login error:", error.response);
         singOut();
       });
   };

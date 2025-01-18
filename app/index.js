@@ -1,149 +1,95 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image, StatusBar } from "react-native";
-import Item from "@/components/sharedCom/Item";
-import { Colors } from "@/constant/Colors";
-import SettingsIcon from "@/assets/icons/SettingsIcon";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import HeaderPopup from "@/components/HeaderPopup";
-import { useStock } from "@/context/StockContext";
-import StockModal from "@/components/Modal/StockModal";
-import StockUpdateModal from "@/components/Modal/StockUpdateModal";
-export default function Dashboard() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [position, setPosition] = useState(null);
-  const { handleDeleteProduct, allProducts, getProducts, setSingleProduct, handleLogout } = useStock();
-  const [addModalVisible, setAddModalVisible] = useState(false);
-  const filteredProducts = allProducts?.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
+import React from "react";
+import { ImageBackground, StatusBar, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
+import { Link, Stack } from "expo-router";
 
-  const handleEditProduct = (product) => {
-    setSingleProduct(product);
-    setPosition(null);
-    setAddModalVisible(true);
-  };
+const { height } = Dimensions.get("window");
 
-  const { top } = useSafeAreaInsets();
+const WelcomeScreen = () => {
   return (
-    <View style={[styles.container, { paddingTop: top }]}>
-      <StatusBar backgroundColor={Colors.header} barStyle="light-content" />
-      <View style={styles.buttonContainer}>
-        <TextInput
-          style={styles.searchBar}
-          placeholder="Search product"
-          placeholderTextColor={Colors.white}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-        <TouchableOpacity
-          onPress={(event) => setPosition({ x: event.nativeEvent.pageX, y: event.nativeEvent.pageY })}
-          style={styles.settingsButtonContainer}
+    <>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+
+      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+
+      <View style={styles.container}>
+        <ImageBackground
+          source={{ uri: "https://pulsetechbd.com/uploads/sitesetting/pulse.png" }}
+          style={styles.topHalf}
+          resizeMode="contain"
         >
-          <SettingsIcon size={30} color="white" />
-        </TouchableOpacity>
+          <View style={styles.imageOverlay} />
+        </ImageBackground>
+
+        {/* Curved bottom container for content */}
+        <View style={styles.bottomHalf}>
+          <Text style={styles.title}>Welcome to Pulse Technologies</Text>
+          <Text style={styles.subtitle}>Discover innovative solutions with cutting-edge technology.</Text>
+          <Link href="/signin" asChild>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Let's Begin</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
       </View>
-      <FlatList
-        refreshing={allProducts.length > 0 ? false : true}
-        onRefresh={() => {
-          getProducts();
-        }}
-        data={filteredProducts}
-        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <Item
-            from={"dashboard"}
-            item={item}
-            onDelete={handleDeleteProduct}
-            onEdit={handleEditProduct}
-            onUpdate={(item) => {
-              setAddModalVisible(true);
-              setSingleProduct({ ...item, stockUpdate: true });
-            }}
-          />
-        )}
-      />
-      {<HeaderPopup position={position} setPosition={setPosition} addProduct={() => setAddModalVisible(true)} signOut={handleLogout} />}
-      {addModalVisible && (
-        <StockModal
-          isVisible={addModalVisible}
-          onClose={() => {
-            setAddModalVisible(false);
-            setSingleProduct(null);
-          }}
-        />
-      )}
-      {/* {isStockUpdateVisible && (
-        <StockUpdateModal
-          singleProduct={singleProduct}
-          onStockUpdate={handleStockUpdate}
-          isVisible={isStockUpdateVisible}
-          onClose={() => setStockUpdateVisible(false)}
-        />
-      )} */}
-    </View>
+    </>
   );
-}
+};
+
+export default WelcomeScreen;
 
 const styles = StyleSheet.create({
-  settingsButtonContainer: {
-    padding: 8,
-    borderRadius: 7,
-    backgroundColor: Colors.secondary,
-  },
   container: {
     flex: 1,
-    paddingHorizontal: 15,
-    backgroundColor: Colors.header,
+    backgroundColor: "#fff",
   },
-  buttonContainer: {
-    flexDirection: "row",
+  topHalf: {
+    height: height * 0.5,
+    width: "100%",
+    justifyContent: "center",
     alignItems: "center",
-    gap: 10,
-    marginBottom: 15,
-    // backgroundColor: "red",
   },
-
-  searchBar: {
+  imageOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.25)",
+  },
+  bottomHalf: {
     flex: 1,
-    backgroundColor: Colors.secondary,
-    borderRadius: 5,
-    padding: 10,
-    height: 45,
-    color: Colors.white,
+    backgroundColor: "#fff",
+    marginTop: -50,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    paddingTop: 60,
+    paddingHorizontal: 30,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
   },
-  tableHeader: {
-    flexDirection: "row",
-    paddingVertical: 10,
-    borderBottomWidth: 2,
-    borderBottomColor: Colors.white,
-  },
-  tableHeaderCell: {
-    flex: 1,
-    color: "#fff",
+  title: {
+    fontSize: 28,
     fontWeight: "bold",
-    fontSize: 14,
+    color: "#333",
+    marginBottom: 10,
     textAlign: "center",
   },
-  tableRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+  subtitle: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 30,
+    textAlign: "center",
+    lineHeight: 22,
   },
-  tableCell: {
-    flex: 1,
+  button: {
+    backgroundColor: "#ff8c00",
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 25,
+  },
+  buttonText: {
+    fontSize: 18,
     color: "#fff",
-    fontSize: 14,
-    textAlign: "center",
-    paddingHorizontal: 5,
-  },
-  productImage: {
-    width: 50,
-    height: 50,
-    resizeMode: "contain",
-    marginHorizontal: 5,
-  },
-  deleteButton: {
-    padding: 5,
+    fontWeight: "600",
   },
 });

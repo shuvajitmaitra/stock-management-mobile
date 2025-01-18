@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { router } from "expo-router";
 
 export function formatDate(dateStr) {
   if (!dateStr) return dateStr;
@@ -57,9 +58,11 @@ export const removeFromStorage = async (key) => {
   }
 };
 
-export const singOut = async () => {
+export const signOut = async () => {
   try {
     await AsyncStorage.clear();
+    router.dismissAll();
+    router.replace("/signin");
   } catch (error) {
     console.error("Error clearing storage:", error);
   }
