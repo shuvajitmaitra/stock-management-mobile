@@ -8,10 +8,11 @@ import Feather from "@expo/vector-icons/Feather";
 import Foundation from "@expo/vector-icons/Foundation";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import ConfirmationModal from "../Modal/ConfirmationModal";
 
 const Item = ({ item, onDelete, onEdit, onUpdate, from = null }) => {
   const [images, setImages] = useState([]);
-
+  const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={styles.itemContainer}>
       {/* Left: Product Image */}
@@ -57,7 +58,7 @@ const Item = ({ item, onDelete, onEdit, onUpdate, from = null }) => {
               </>
             )}
             {
-              <TouchableOpacity disabled={!from && !item.productId} style={styles.actionButton} onPress={() => onDelete && onDelete(item)}>
+              <TouchableOpacity disabled={!from && !item.productId} style={styles.actionButton} onPress={() => setModalVisible(true)}>
                 <MaterialIcons name="delete" size={20} color={!from && !item.productId ? "#a0a0a0" : "#ff6b6b"} />
               </TouchableOpacity>
             }
@@ -65,9 +66,18 @@ const Item = ({ item, onDelete, onEdit, onUpdate, from = null }) => {
         </View>
       </View>
 
-      {/* Right: Action Buttons */}
-
-      {/* Image viewer for full screen view */}
+      {modalVisible && (
+        <ConfirmationModal
+          isVisible={modalVisible}
+          tittle="Delete!"
+          description="Are you sure you want to delete this product?"
+          okPress={() => {
+            onDelete && onDelete(item);
+            setModalVisible(false);
+          }}
+          cancelPress={() => setModalVisible(false)}
+        />
+      )}
       <ImageView images={images} imageIndex={0} visible={images.length > 0} onRequestClose={() => setImages([])} />
     </View>
   );
@@ -103,7 +113,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
   },
   itemName: {
-    color: "white",
+    color: Colors.heading,
     fontSize: 16,
     fontWeight: "600",
     marginBottom: 4,
