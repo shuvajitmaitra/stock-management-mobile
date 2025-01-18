@@ -27,7 +27,7 @@ export default function RootLayout() {
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="signin" options={{ presentation: "modal", headerTitle: "" }} />
+      <Stack.Screen name="signin" options={{ presentation: "modal", headerTitle: "", headerShown: false }} />
     </Stack>
   );
 }

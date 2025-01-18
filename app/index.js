@@ -1,6 +1,7 @@
 import React from "react";
 import { ImageBackground, StatusBar, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
 import { Link, Stack } from "expo-router";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const { height } = Dimensions.get("window");
 
@@ -22,7 +23,8 @@ const WelcomeScreen = () => {
 
         {/* Curved bottom container for content */}
         <View style={styles.bottomHalf}>
-          <Text style={styles.title}>Welcome to Pulse Technologies</Text>
+          {/* <Text style={styles.title}>Welcome to</Text> */}
+          <Text style={styles.title}>Welcome to{"\n"}Pulse Technologies</Text>
           <Text style={styles.subtitle}>Discover innovative solutions with cutting-edge technology.</Text>
           <Link href="/signin" asChild>
             <TouchableOpacity style={styles.button}>
@@ -40,7 +42,7 @@ export default WelcomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#384152",
   },
   topHalf: {
     height: height * 0.5,
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
   },
   bottomHalf: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#384152",
     marginTop: -50,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
@@ -68,15 +70,15 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: "bold",
-    color: "#333",
+    color: "white",
     marginBottom: 10,
     textAlign: "center",
   },
   subtitle: {
     fontSize: 16,
-    color: "#666",
+    color: "#999",
     marginBottom: 30,
     textAlign: "center",
     lineHeight: 22,
