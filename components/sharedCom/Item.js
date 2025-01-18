@@ -6,6 +6,8 @@ import { formatDate } from "@/utils/commonFunction";
 import ImageView from "react-native-image-viewing";
 import Feather from "@expo/vector-icons/Feather";
 import Foundation from "@expo/vector-icons/Foundation";
+import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 const Item = ({ item, onDelete, onEdit, onUpdate, from = null }) => {
   const [images, setImages] = useState([]);
@@ -26,14 +28,28 @@ const Item = ({ item, onDelete, onEdit, onUpdate, from = null }) => {
         <Text style={styles.itemName} numberOfLines={2}>
           {item.name}
         </Text>
-        <Text style={styles.quantityText}>Qty: {item?.stockQuantity || 0}</Text>
+        <View style={styles.quantityContainer}>
+          <View style={styles.quantityContainer}>
+            <SimpleLineIcons name="handbag" size={13} color="#4ecdc4" />
+            <Text style={styles.quantityText}>{item?.stockQuantity || 0}</Text>
+          </View>
+          {item?.user?.fullName && (
+            <View style={styles.quantityContainer}>
+              <Feather name="user" size={15} color="#a0a0a0" />
+              <Text style={[styles.quantityText, { color: "#a0a0a0" }]}>{item?.user?.fullName || 0}</Text>
+            </View>
+          )}
+        </View>
         <View style={styles.bottomContainer}>
-          <Text style={styles.updateText}>{formatDate(item?.date)}</Text>
+          <View style={styles.quantityContainer}>
+            <FontAwesome6 name="clock" size={13} color="#a0a0a0" />
+            <Text style={styles.updateText}>{formatDate(item?.date)}</Text>
+          </View>
           <View style={styles.buttonsContainer}>
             {from && (
               <>
                 <TouchableOpacity style={styles.actionButton} onPress={() => onUpdate && onUpdate(item)}>
-                  <Feather name="edit" size={20} color="black" />
+                  <Feather name="edit" size={20} color="#16C47F" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionButton} onPress={() => onEdit && onEdit(item)}>
                   <Foundation name="page-edit" size={20} color="#4ecdc4" />
@@ -58,6 +74,11 @@ const Item = ({ item, onDelete, onEdit, onUpdate, from = null }) => {
 };
 
 const styles = StyleSheet.create({
+  quantityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+  },
   bottomContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -90,7 +111,6 @@ const styles = StyleSheet.create({
   quantityText: {
     color: "#4ecdc4",
     fontSize: 14,
-    marginBottom: 2,
   },
   updateText: {
     color: "#a0a0a0",

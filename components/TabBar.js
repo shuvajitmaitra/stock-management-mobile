@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, TouchableOpacity, Dimensions, StyleSheet, Text } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated";
 import { Colors } from "@/constant/Colors";
@@ -9,10 +9,12 @@ function TabBar({ state, descriptors, navigation }) {
   const tabWidth = width / 1.5 / state.routes.length;
   const activeTabPosition = useSharedValue(0);
 
-  // Correctly position the active background in the center of the active icon
-  activeTabPosition.value = withTiming(state.index * tabWidth + tabWidth / 2 - 25, {
-    duration: 250,
-  });
+  // Use useEffect to update the shared value
+  useEffect(() => {
+    activeTabPosition.value = withTiming(state.index * tabWidth + tabWidth / 2 - 25, {
+      duration: 250,
+    });
+  }, [state.index, tabWidth]);
 
   return (
     <View style={{ backgroundColor: Colors.header }}>

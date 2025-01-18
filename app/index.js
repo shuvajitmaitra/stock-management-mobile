@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ImageBackground, StatusBar, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
 import { Link, router, Stack } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,28 +8,26 @@ const { height } = Dimensions.get("window");
 const WelcomeScreen = () => {
   const getUser = async () => {
     try {
-      const userData = await AsyncStorage.getItem("user");
-
-      if (userData !== null) {
-        const userObject = JSON.parse(userData);
-        return userObject;
-      } else {
-        console.log("No user data found in AsyncStorage.");
-        return null; // Return null if no data is found
-      }
+      const userJson = await AsyncStorage.getItem("user");
+      return userJson ? JSON.parse(userJson) : null;
     } catch (error) {
       console.error("Error retrieving data", error);
-      return null; // Return null in case of an error
+      return null;
     }
   };
 
+  const [user, setUser] = React.useState(null);
+
   useEffect(() => {
-    getUser().then((user) => {
-      if (user) {
-        router.dismissAll();
+    const checkUser = async () => {
+      const userData = await getUser();
+      if (userData) {
+        setUser(userData);
         router.push("/(tabs)");
       }
-    });
+    };
+
+    checkUser();
   }, []);
 
   return (
