@@ -1,21 +1,27 @@
 {
   "expo": {
-    "name": "stock-management-mobile",
+    "name": "Pulse Tech Stock",
     "slug": "stock-management-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/pulse.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
+    "splash": {
+      "image": "./assets/images/pulse.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1f2938"
+    },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/images/pulse.png",
+        "backgroundColor": "#1f2938"
+      },
+      "package": "com.shuvajitmaitra.stockmanagementmobile"
     },
     "web": {
       "bundler": "metro",
@@ -27,15 +33,23 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/pulse.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#1f2938"
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "8d71c31d-8eee-4b07-9067-f5ad2a2a8c8c"
+      }
     }
   }
 }

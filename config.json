@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "stock-management-mobile",
+    "name": "Pulse Tech Stock",
     "slug": "stock-management-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,8 +13,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/pulse.png",
+        "backgroundColor": "#1f2938"
       }
     },
     "web": {
@@ -30,7 +30,7 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#1f2938"
         }
       ]
     ],
