@@ -4,6 +4,9 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, Image } fro
 import { Colors } from "@/constant/Colors";
 import LoginCover from "../assets/icons/LoginCover";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import axiosInstance from "../constant/axios";
+import { saveObject, singOut } from "@/utils/commonFunction";
+
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,15 +20,29 @@ const SignInScreen = () => {
   };
 
   const handleSignIn = () => {
-    router.dismissAll();
-    router.push("/(tabs)");
     const isEmailValid = validateEmail(email);
     const isPasswordValid = password.length >= 6;
 
     setEmailError(!isEmailValid);
     setPasswordError(!isPasswordValid);
-
+    console.log("email", JSON.stringify(email, null, 2));
+    console.log("password", JSON.stringify(password, null, 2));
     if (isEmailValid && isPasswordValid) {
+      axiosInstance
+        .post("/user/login", { email, password })
+        .then((res) => {
+          if (res.data.success) {
+            router.dismissAll();
+            router.push("/(tabs)");
+            saveObject("user", res.data.user);
+          } else {
+            singOut();
+          }
+        })
+        .catch((error) => {
+          console.error("Login error:", error.response);
+          singOut();
+        });
     } else {
       Alert.alert("Error", "Please fix the errors and try again.");
     }

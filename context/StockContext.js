@@ -27,25 +27,6 @@ export const StockProvider = ({ children }) => {
 
   const user = AsyncStorage.getItem("email");
 
-  const handleUserLogin = (email, password) => {
-    console.log("email", JSON.stringify(email, null, 2));
-    console.log("password", JSON.stringify(password, null, 2));
-    axiosInstance
-      .post("/user/login", { email, password })
-      .then((res) => {
-        if (res.data.success) {
-          // router.replace("/dashboard");
-          saveObject("user", res.data.user);
-        } else {
-          singOut();
-        }
-      })
-      .catch((error) => {
-        console.error("Login error:", error.response);
-        singOut();
-      });
-  };
-
   const handleAddProduct = (data) => {
     const newProduct = { ...data, date: new Date(), stockQuantity: 0, _id: Math.random().toString(36) };
     setProducts((prev) => [newProduct, ...prev]);
@@ -276,7 +257,6 @@ export const StockProvider = ({ children }) => {
     setSTUVisible,
     setAllProducts,
     handleLogout,
-    handleUserLogin,
     handleAddProduct,
     handleStockUpdate,
     handleDeleteHistory,
