@@ -16,7 +16,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [stockType, setStockType] = useState("out");
-  const [quantity, setQuantity] = useState(10);
+  const [quantity, setQuantity] = useState(1);
   useEffect(() => {
     if (singleProduct?.name || singleProduct?.image) {
       setProductName(singleProduct?.name);
@@ -115,6 +115,8 @@ const StockModal = ({ isVisible, onClose, user }) => {
     }
   };
 
+  const disabled =
+    singleProduct?.stockUpdate && (isUploading || !quantity || (stockType === "out" && singleProduct?.stockQuantity <= quantity));
   return (
     <ReactNativeModal
       animationType="slide"
@@ -167,14 +169,20 @@ const StockModal = ({ isVisible, onClose, user }) => {
           <>
             <Text style={styles.inputLabel}>Product Quantity</Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input]}
               value={quantity}
-              onChangeText={setQuantity}
-              placeholder="Enter quantity..."
+              onChangeText={(num) => setQuantity(parseInt(num))}
+              placeholder={quantity ? `${quantity}` : "Enter quantity..."}
               keyboardType="numeric"
               placeholderTextColor={Colors.bodyText}
             />
           </>
+        )}
+        {stockType === "out" && quantity > singleProduct?.stockQuantity && (
+          <Text style={{ color: "red" }}>Quantity should be less than or equal to {singleProduct?.stockQuantity}</Text>
+        )}
+        {singleProduct?.stockUpdate && stockType === "out" && quantity === 0 && (
+          <Text style={{ color: "red" }}>Quantity should be greater than 0</Text>
         )}
         <Text style={styles.inputLabel}>Add Picture</Text>
 
@@ -196,8 +204,8 @@ const StockModal = ({ isVisible, onClose, user }) => {
         )}
 
         <TouchableOpacity
-          disabled={isUploading}
-          style={styles.submitButton}
+          disabled={disabled}
+          style={[styles.submitButton, { opacity: disabled ? 0.5 : 1 }]}
           onPress={singleProduct && !singleProduct?.stockUpdate ? handleEdit : handleSubmit}
         >
           <Text style={styles.buttonText}>{singleProduct?._id ? "Update Product" : "Add Product"}</Text>

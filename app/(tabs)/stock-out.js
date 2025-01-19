@@ -7,7 +7,7 @@ import { useStock } from "@/context/StockContext";
 
 const StockOut = () => {
   const { top } = useSafeAreaInsets();
-  const { stockOut, handleDeleteHistory } = useStock();
+  const { stockOut, handleDeleteHistory, user } = useStock();
 
   return (
     <View style={[styles.container, { paddingTop: top }]}>
@@ -17,7 +17,7 @@ const StockOut = () => {
         data={stockOut}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => <Item item={item} onDelete={handleDeleteHistory} />}
+        renderItem={({ item }) => <Item user={user} item={item} onDelete={handleDeleteHistory} />}
       />
     </View>
   );
