@@ -40,15 +40,17 @@ export default function Dashboard() {
         </TouchableOpacity>
       </View>
       <FlatList
-        refreshing={allProducts.length > 0 ? false : true}
+        // refreshing={allProducts.length > 0 ? false : true}
+        refreshing={false}
         onRefresh={() => {
           getProducts();
         }}
         data={filteredProducts}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <Item
+            index={index}
             from={"dashboard"}
             user={user}
             item={item}

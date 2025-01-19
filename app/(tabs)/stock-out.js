@@ -17,7 +17,7 @@ const StockOut = () => {
         data={stockOut}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => <Item user={user} item={item} onDelete={handleDeleteHistory} />}
+        renderItem={({ item, index }) => <Item index={index} user={user} item={item} onDelete={handleDeleteHistory} />}
       />
     </View>
   );

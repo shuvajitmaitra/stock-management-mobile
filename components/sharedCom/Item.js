@@ -10,11 +10,12 @@ import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import ConfirmationModal from "../Modal/ConfirmationModal";
 
-const Item = ({ item, onDelete, onEdit, onUpdate, from = null, user }) => {
+const Item = ({ index, item, onDelete, onEdit, onUpdate, from = null, user }) => {
   const [images, setImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={styles.itemContainer}>
+      <Text style={styles.indexText}>{index + 1}</Text>
       {/* Left: Product Image */}
       <TouchableOpacity onPress={() => setImages([{ uri: item.image }])}>
         <Image
@@ -90,6 +91,12 @@ const Item = ({ item, onDelete, onEdit, onUpdate, from = null, user }) => {
 };
 
 const styles = StyleSheet.create({
+  indexText: {
+    color: Colors.bodyText,
+    fontSize: 16,
+    fontWeight: "bold",
+    marginRight: 10,
+  },
   quantityContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -107,6 +114,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     paddingRight: 0,
+    paddingLeft: 5,
   },
   productImage: {
     width: 70,
