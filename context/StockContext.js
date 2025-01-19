@@ -150,10 +150,12 @@ export const StockProvider = ({ children }) => {
         if (res.data.success) {
           // console.log("product edit", JSON.stringify(res.data, null, 2));
           getProducts();
+          getHistories();
         }
       })
       .catch((err) => {
         getProducts();
+        getHistories();
         console.log("err.response", JSON.stringify(err.response, null, 2));
       });
   };

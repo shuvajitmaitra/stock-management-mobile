@@ -186,7 +186,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
             />
           </>
         )}
-        {stockType === "out" && quantity > singleProduct?.stockQuantity && (
+        {singleProduct.stockUpdate && stockType === "out" && quantity > singleProduct?.stockQuantity && (
           <Text style={{ color: "red" }}>Quantity should be less than or equal to {singleProduct?.stockQuantity}</Text>
         )}
         {singleProduct?.stockUpdate && stockType === "out" && quantity === 0 && (

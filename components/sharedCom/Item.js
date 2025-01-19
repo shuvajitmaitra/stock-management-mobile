@@ -49,14 +49,18 @@ const Item = ({ item, onDelete, onEdit, onUpdate, from = null, user }) => {
           <View style={styles.buttonsContainer}>
             {from && (
               <>
-                <TouchableOpacity style={styles.actionButton} onPress={() => onUpdate && onUpdate(item)}>
+                <TouchableOpacity
+                  style={styles.actionButton}
+                  onLongPress={() => user?.role === "admin" && onEdit && onEdit(item)}
+                  onPress={() => onUpdate && onUpdate(item)}
+                >
                   <Feather name="edit" size={20} color="#16C47F" />
                 </TouchableOpacity>
-                {user?.role === "admin" && (
+                {/* {user?.role === "admin" && (
                   <TouchableOpacity style={styles.actionButton} onPress={() => onEdit && onEdit(item)}>
                     <Foundation name="page-edit" size={20} color="#4ecdc4" />
                   </TouchableOpacity>
-                )}
+                )} */}
               </>
             )}
             {user?.role === "admin" && (

@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     position: "relative",
     alignSelf: "center",
-    marginBottom: 10,
+    marginVertical: 5,
   },
   activeBackground: {
     position: "absolute",
