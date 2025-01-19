@@ -61,7 +61,15 @@ export default function Dashboard() {
           />
         )}
       />
-      {<HeaderPopup position={position} setPosition={setPosition} addProduct={() => setAddModalVisible(true)} signOut={handleLogout} />}
+      {
+        <HeaderPopup
+          user={user}
+          position={position}
+          setPosition={setPosition}
+          addProduct={() => setAddModalVisible(true)}
+          signOut={handleLogout}
+        />
+      }
       {addModalVisible && (
         <StockModal
           isVisible={addModalVisible}

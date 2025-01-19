@@ -6,7 +6,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constant/Colors";
 import signOut from "@/utils/commonFunction";
 import { router } from "expo-router";
-const HeaderPopup = ({ position, setPosition, addProduct }) => {
+const HeaderPopup = ({ position, setPosition, addProduct, user }) => {
   return (
     <Popover
       popoverStyle={{
@@ -19,16 +19,18 @@ const HeaderPopup = ({ position, setPosition, addProduct }) => {
       }}
     >
       <View style={styles.popoverStyle}>
-        <TouchableOpacity
-          onPress={() => {
-            setPosition(null);
-            addProduct();
-          }}
-          style={styles.stockButton}
-        >
-          <AntDesign name="plus" size={24} color="white" />
-          <Text style={styles.text}>Add Product</Text>
-        </TouchableOpacity>
+        {user?.role === "admin" && (
+          <TouchableOpacity
+            onPress={() => {
+              setPosition(null);
+              addProduct();
+            }}
+            style={styles.stockButton}
+          >
+            <AntDesign name="plus" size={24} color="white" />
+            <Text style={styles.text}>Add Product</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           onPress={() => {
             router.dismissAll();

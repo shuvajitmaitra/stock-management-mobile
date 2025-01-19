@@ -10,6 +10,7 @@ import { Colors } from "@/constant/Colors";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Picker } from "@react-native-picker/picker";
+import { useReducedMotion } from "react-native-reanimated";
 const StockModal = ({ isVisible, onClose, user }) => {
   const { handleAddProduct, singleProduct, handleEditProduct, handleStockUpdate } = useStock();
   const [productName, setProductName] = useState("");
@@ -116,7 +117,8 @@ const StockModal = ({ isVisible, onClose, user }) => {
   };
 
   const disabled =
-    singleProduct?.stockUpdate && (isUploading || !quantity || (stockType === "out" && singleProduct?.stockQuantity <= quantity));
+    singleProduct?.stockUpdate &&
+    (isUploading || !quantity || (stockType === "out" && singleProduct?.stockQuantity <= quantity) || !uploadedImageUrl);
   return (
     <ReactNativeModal
       animationType="slide"
@@ -150,7 +152,10 @@ const StockModal = ({ isVisible, onClose, user }) => {
         />
         {singleProduct?.stockUpdate && (
           <>
-            <Text style={styles.inputLabel}>Select type</Text>
+            <Text style={styles.inputLabel}>
+              Select type
+              <RequireIcon />
+            </Text>
             <View style={styles.pickerContainer}>
               <Picker
                 style={styles.picker}
@@ -167,7 +172,10 @@ const StockModal = ({ isVisible, onClose, user }) => {
         )}
         {singleProduct?.stockUpdate && (
           <>
-            <Text style={styles.inputLabel}>Product Quantity</Text>
+            <Text style={styles.inputLabel}>
+              Product Quantity
+              <RequireIcon />
+            </Text>
             <TextInput
               style={[styles.input]}
               value={quantity}
@@ -184,7 +192,10 @@ const StockModal = ({ isVisible, onClose, user }) => {
         {singleProduct?.stockUpdate && stockType === "out" && quantity === 0 && (
           <Text style={{ color: "red" }}>Quantity should be greater than 0</Text>
         )}
-        <Text style={styles.inputLabel}>Add Picture</Text>
+        <Text style={styles.inputLabel}>
+          Add Picture
+          {singleProduct?.stockUpdate && <RequireIcon />}
+        </Text>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={openCamera}>
