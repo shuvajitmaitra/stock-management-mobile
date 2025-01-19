@@ -72,7 +72,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
         console.log("singleProduct ", JSON.stringify(singleProduct, null, 2));
         await handleStockUpdate({
           name: productName,
-          _id: singleProduct._id,
+          _id: singleProduct?._id,
           stockQuantity: quantity,
           type: stockType,
           image: uploadedImageUrl,
@@ -186,7 +186,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
             />
           </>
         )}
-        {singleProduct.stockUpdate && stockType === "out" && quantity > singleProduct?.stockQuantity && (
+        {singleProduct?.stockUpdate && stockType === "out" && quantity > singleProduct?.stockQuantity && (
           <Text style={{ color: "red" }}>Quantity should be less than or equal to {singleProduct?.stockQuantity}</Text>
         )}
         {singleProduct?.stockUpdate && stockType === "out" && quantity === 0 && (
