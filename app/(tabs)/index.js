@@ -65,6 +65,7 @@ export default function Dashboard() {
       {addModalVisible && (
         <StockModal
           isVisible={addModalVisible}
+          user={user}
           onClose={() => {
             setAddModalVisible(false);
             setSingleProduct(null);

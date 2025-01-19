@@ -10,12 +10,12 @@ import { Colors } from "@/constant/Colors";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Picker } from "@react-native-picker/picker";
-const StockModal = ({ isVisible, onClose }) => {
+const StockModal = ({ isVisible, onClose, user }) => {
   const { handleAddProduct, singleProduct, handleEditProduct, handleStockUpdate } = useStock();
   const [productName, setProductName] = useState("");
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [stockType, setStockType] = useState("in");
+  const [stockType, setStockType] = useState("out");
   const [quantity, setQuantity] = useState(10);
   useEffect(() => {
     if (singleProduct?.name || singleProduct?.image) {
@@ -155,6 +155,7 @@ const StockModal = ({ isVisible, onClose }) => {
                 selectedValue={stockType}
                 onValueChange={(itemValue) => setStockType(itemValue)}
                 mode="dropdown"
+                enabled={user?.role === "admin"}
               >
                 <Picker.Item style={styles.pickerItem} label="Stock in" value="in" />
                 <Picker.Item style={styles.pickerItem} label="Stock out" value="out" />

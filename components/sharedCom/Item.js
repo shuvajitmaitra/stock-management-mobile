@@ -41,7 +41,7 @@ const Item = ({ item, onDelete, onEdit, onUpdate, from = null, user }) => {
             </View>
           )}
         </View>
-        <View style={styles.bottomContainer}>
+        <View style={[styles.bottomContainer, !from && user?.role !== "admin" && { marginTop: 5 }]}>
           <View style={styles.quantityContainer}>
             <FontAwesome6 name="clock" size={13} color="#a0a0a0" />
             <Text style={styles.updateText}>{formatDate(item?.date)}</Text>

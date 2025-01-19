@@ -117,7 +117,7 @@ export const StockProvider = ({ children }) => {
       .patch(`/product/product-update/${product._id}`, {
         ...product,
         date: new Date(),
-        userEmail: "shuvajitmaitra@gmail.com",
+        userEmail: user.email || "shuvajitmaitra1@gmail.com",
       })
       .then((res) => {
         console.log("update stock", JSON.stringify(res.data, null, 2));
