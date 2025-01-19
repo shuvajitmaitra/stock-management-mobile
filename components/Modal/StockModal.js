@@ -118,7 +118,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
 
   const disabled =
     singleProduct?.stockUpdate &&
-    (isUploading || !quantity || (stockType === "out" && singleProduct?.stockQuantity <= quantity) || !uploadedImageUrl);
+    (isUploading || !quantity || (stockType === "out" && singleProduct?.stockQuantity < quantity) || !uploadedImageUrl);
   return (
     <ReactNativeModal
       animationType="slide"
