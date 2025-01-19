@@ -7,11 +7,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderPopup from "@/components/HeaderPopup";
 import { useStock } from "@/context/StockContext";
 import StockModal from "@/components/Modal/StockModal";
-import StockUpdateModal from "@/components/Modal/StockUpdateModal";
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [position, setPosition] = useState(null);
-  const { handleDeleteProduct, allProducts, getProducts, setSingleProduct, handleLogout } = useStock();
+  const { handleDeleteProduct, allProducts, getProducts, setSingleProduct, handleLogout, user } = useStock();
   const [addModalVisible, setAddModalVisible] = useState(false);
   const filteredProducts = allProducts?.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -51,6 +50,7 @@ export default function Dashboard() {
         renderItem={({ item }) => (
           <Item
             from={"dashboard"}
+            user={user}
             item={item}
             onDelete={handleDeleteProduct}
             onEdit={handleEditProduct}

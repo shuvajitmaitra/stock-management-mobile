@@ -24,8 +24,17 @@ export const StockProvider = ({ children }) => {
   const [singleProduct, setSingleProduct] = useState(null);
   const [addProductVisible, setAddProductVisible] = useState(false);
   const [sTUVisible, setSTUVisible] = useState(false);
+  const [user, setUser] = useState({});
 
-  const user = AsyncStorage.getItem("email");
+  const getUser = async () => {
+    try {
+      const userJson = await AsyncStorage.getItem("user");
+      return userJson ? JSON.parse(userJson) : null;
+    } catch (error) {
+      console.error("Error retrieving data", error);
+      return null;
+    }
+  };
 
   const handleAddProduct = (data) => {
     const newProduct = { ...data, date: new Date(), stockQuantity: 0, _id: Math.random().toString(36) };
@@ -237,10 +246,11 @@ export const StockProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (user) {
+    getUser().then((res) => {
+      setUser(res);
       getProducts();
       getHistories();
-    }
+    });
   }, []);
 
   const contextValue = {

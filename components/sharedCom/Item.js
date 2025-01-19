@@ -10,7 +10,7 @@ import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import ConfirmationModal from "../Modal/ConfirmationModal";
 
-const Item = ({ item, onDelete, onEdit, onUpdate, from = null }) => {
+const Item = ({ item, onDelete, onEdit, onUpdate, from = null, user }) => {
   const [images, setImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   return (
@@ -52,16 +52,18 @@ const Item = ({ item, onDelete, onEdit, onUpdate, from = null }) => {
                 <TouchableOpacity style={styles.actionButton} onPress={() => onUpdate && onUpdate(item)}>
                   <Feather name="edit" size={20} color="#16C47F" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton} onPress={() => onEdit && onEdit(item)}>
-                  <Foundation name="page-edit" size={20} color="#4ecdc4" />
-                </TouchableOpacity>
+                {user?.role === "admin" && (
+                  <TouchableOpacity style={styles.actionButton} onPress={() => onEdit && onEdit(item)}>
+                    <Foundation name="page-edit" size={20} color="#4ecdc4" />
+                  </TouchableOpacity>
+                )}
               </>
             )}
-            {
+            {user?.role === "admin" && (
               <TouchableOpacity disabled={!from && !item.productId} style={styles.actionButton} onPress={() => setModalVisible(true)}>
                 <MaterialIcons name="delete" size={20} color={!from && !item.productId ? "#a0a0a0" : "#ff6b6b"} />
               </TouchableOpacity>
-            }
+            )}
           </View>
         </View>
       </View>
