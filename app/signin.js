@@ -69,6 +69,7 @@ const SignInScreen = () => {
             setEmail(text.toLowerCase());
             setEmailError(false);
           }}
+          autoCapitalize="none"
         />
         {emailError && <Text style={styles.errorText}>Invalid email format</Text>}
 

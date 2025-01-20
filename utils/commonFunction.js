@@ -141,3 +141,20 @@ export const uploadImageToCloudinary = async (uri, setIsUploading, setUploadedIm
     setIsUploading(false);
   }
 };
+
+export const deleteImageFromCloudinary = async (publicId) => {
+  try {
+    const response = await fetch("YOUR_SERVER_ENDPOINT_TO_DELETE_IMAGE", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ publicId }),
+    });
+
+    const result = await response.json();
+    console.log("Delete response: ", result);
+  } catch (error) {
+    console.error("Error deleting image: ", error);
+  }
+};

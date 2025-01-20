@@ -10,7 +10,7 @@ import StockModal from "@/components/Modal/StockModal";
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [position, setPosition] = useState(null);
-  const { handleDeleteProduct, allProducts, getProducts, setSingleProduct, handleLogout, user } = useStock();
+  const { handleDeleteProduct, allProducts, getProducts, setSingleProduct, handleLogout, user, getHistories } = useStock();
   const [addModalVisible, setAddModalVisible] = useState(false);
   const filteredProducts = allProducts?.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -40,10 +40,11 @@ export default function Dashboard() {
         </TouchableOpacity>
       </View>
       <FlatList
-        // refreshing={allProducts.length > 0 ? false : true}
-        refreshing={false}
+        refreshing={allProducts.length > 0 ? false : true}
+        // refreshing={true}
         onRefresh={() => {
           getProducts();
+          getHistories();
         }}
         data={filteredProducts}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}

@@ -26,6 +26,20 @@ export const StockProvider = ({ children }) => {
   const [sTUVisible, setSTUVisible] = useState(false);
   const [user, setUser] = useState({});
 
+  const deleteCloudinaryImage = async (url) => {
+    console.log("url", url);
+    try {
+      const response = await axiosInstance.get("/user/delete-cloudinary-image", { url });
+      if (response.data.success) {
+        console.log("Image deleted successfully");
+      } else {
+        console.error("Failed to delete image");
+      }
+    } catch (error) {
+      console.log("error.response.data", JSON.stringify(error.response.data, null, 2));
+    }
+  };
+
   const getUser = async () => {
     try {
       const userJson = await AsyncStorage.getItem("user");
@@ -210,7 +224,7 @@ export const StockProvider = ({ children }) => {
     axiosInstance
       .get("/history/all-histories")
       .then((res) => {
-        // console.log("histories", JSON.stringify(res.data, null, 2));
+        console.log("histories", JSON.stringify(res.data, null, 2));
         if (res.data.success) {
           setStockIn(res.data.stockIn);
           setStockOut(res.data.stockOut);
@@ -256,8 +270,10 @@ export const StockProvider = ({ children }) => {
   }, []);
 
   const contextValue = {
+    deleteCloudinaryImage,
     handleEditProduct,
     getProducts,
+    getHistories,
     user,
     products,
     allProducts,

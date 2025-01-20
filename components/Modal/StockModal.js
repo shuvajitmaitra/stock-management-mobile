@@ -10,7 +10,6 @@ import { Colors } from "@/constant/Colors";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Picker } from "@react-native-picker/picker";
-import { useReducedMotion } from "react-native-reanimated";
 const StockModal = ({ isVisible, onClose, user }) => {
   const { handleAddProduct, singleProduct, handleEditProduct, handleStockUpdate } = useStock();
   const [productName, setProductName] = useState("");
@@ -35,7 +34,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
-      quality: 0.7,
+      quality: 0.5,
     });
 
     if (!result.canceled) {
@@ -53,7 +52,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
-      quality: 0.7,
+      quality: 0.5,
     });
 
     if (!result.canceled) {
@@ -122,8 +121,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
   return (
     <ReactNativeModal
       animationType="slide"
-      avoidKeyboard
-      transparent
+      avoidKeyboard={true}
       swipeDirection="down"
       onSwipeComplete={onClose}
       style={styles.modalStyle}
@@ -149,6 +147,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
           onChangeText={(text) => setProductName(text)}
           editable={!singleProduct?.stockUpdate}
           multiline
+          autoCapitalize="words"
         />
         {singleProduct?.stockUpdate && (
           <>
@@ -183,6 +182,8 @@ const StockModal = ({ isVisible, onClose, user }) => {
               placeholder={quantity ? `${quantity}` : "Enter quantity..."}
               keyboardType="numeric"
               placeholderTextColor={Colors.bodyText}
+              autoCapitalize="none"
+              inputMode="numeric"
             />
           </>
         )}

@@ -79,6 +79,7 @@ const Item = ({ index, item, onDelete, onEdit, onUpdate, from = null, user }) =>
           tittle="Delete!"
           description="Are you sure you want to delete this product?"
           okPress={() => {
+            // item.image && deleteCloudinaryImage(item.image);
             onDelete && onDelete(item);
             setModalVisible(false);
           }}
