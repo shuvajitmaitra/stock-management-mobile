@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image, StatusBar } from "react-native";
+import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image, StatusBar, BackHandler, Alert } from "react-native";
 import Item from "@/components/sharedCom/Item";
 import { Colors } from "@/constant/Colors";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
@@ -7,11 +7,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderPopup from "@/components/HeaderPopup";
 import { useStock } from "@/context/StockContext";
 import StockModal from "@/components/Modal/StockModal";
+
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [position, setPosition] = useState(null);
   const { handleDeleteProduct, allProducts, getProducts, setSingleProduct, handleLogout, user, getHistories } = useStock();
   const [addModalVisible, setAddModalVisible] = useState(false);
+
   const filteredProducts = allProducts?.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const handleEditProduct = (product) => {
@@ -21,6 +23,20 @@ export default function Dashboard() {
   };
 
   const { top } = useSafeAreaInsets();
+
+  // Disable the Android back button on the dashboard
+  useEffect(() => {
+    const backAction = () => {
+      BackHandler.exitApp();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+
+    // Clean up the event listener
+    return () => backHandler.remove();
+  }, []);
+
   return (
     <View style={[styles.container, { paddingTop: top + 10 }]}>
       <StatusBar backgroundColor={Colors.header} barStyle="light-content" />
@@ -33,7 +49,12 @@ export default function Dashboard() {
           onChangeText={setSearchQuery}
         />
         <TouchableOpacity
-          onPress={(event) => setPosition({ x: event.nativeEvent.pageX, y: event.nativeEvent.pageY })}
+          onPress={(event) =>
+            setPosition({
+              x: event.nativeEvent.pageX,
+              y: event.nativeEvent.pageY,
+            })
+          }
           style={styles.settingsButtonContainer}
         >
           <SettingsIcon size={30} color="white" />
@@ -41,7 +62,6 @@ export default function Dashboard() {
       </View>
       <FlatList
         refreshing={allProducts.length > 0 ? false : true}
-        // refreshing={true}
         onRefresh={() => {
           getProducts();
           getHistories();
@@ -64,15 +84,13 @@ export default function Dashboard() {
           />
         )}
       />
-      {
-        <HeaderPopup
-          user={user}
-          position={position}
-          setPosition={setPosition}
-          addProduct={() => setAddModalVisible(true)}
-          signOut={handleLogout}
-        />
-      }
+      <HeaderPopup
+        user={user}
+        position={position}
+        setPosition={setPosition}
+        addProduct={() => setAddModalVisible(true)}
+        signOut={handleLogout}
+      />
       {addModalVisible && (
         <StockModal
           isVisible={addModalVisible}
@@ -83,14 +101,6 @@ export default function Dashboard() {
           }}
         />
       )}
-      {/* {isStockUpdateVisible && (
-        <StockUpdateModal
-          singleProduct={singleProduct}
-          onStockUpdate={handleStockUpdate}
-          isVisible={isStockUpdateVisible}
-          onClose={() => setStockUpdateVisible(false)}
-        />
-      )} */}
     </View>
   );
 }
@@ -111,9 +121,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     marginBottom: 15,
-    // backgroundColor: "red",
   },
-
   searchBar: {
     flex: 1,
     backgroundColor: Colors.secondary,
