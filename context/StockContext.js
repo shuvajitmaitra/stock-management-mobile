@@ -219,7 +219,7 @@ export const StockProvider = ({ children }) => {
     axiosInstance
       .get("/history/all-histories")
       .then((res) => {
-        console.log("histories", JSON.stringify(res.data, null, 2));
+        // console.log("histories", JSON.stringify(res.data, null, 2));
         if (res.data.success) {
           setStockIn(res.data.stockIn);
           setStockOut(res.data.stockOut);

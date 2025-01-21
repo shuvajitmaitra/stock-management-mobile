@@ -90,6 +90,7 @@ export default function Dashboard() {
         setPosition={setPosition}
         addProduct={() => setAddModalVisible(true)}
         signOut={handleLogout}
+        products={allProducts.length}
       />
       {addModalVisible && (
         <StockModal

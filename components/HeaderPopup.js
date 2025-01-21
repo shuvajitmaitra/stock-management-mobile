@@ -4,9 +4,8 @@ import Popover, { Rect } from "react-native-popover-view";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constant/Colors";
-import signOut from "@/utils/commonFunction";
 import { router } from "expo-router";
-const HeaderPopup = ({ position, setPosition, addProduct, user }) => {
+const HeaderPopup = ({ position, setPosition, addProduct, user, products }) => {
   return (
     <Popover
       popoverStyle={{
@@ -41,6 +40,9 @@ const HeaderPopup = ({ position, setPosition, addProduct, user }) => {
           <Feather name="log-out" size={24} color={Colors.error} />
           <Text style={[styles.text, { color: Colors.error }]}>Sign Out</Text>
         </TouchableOpacity>
+        <View style={styles.stockButton}>
+          <Text style={styles.text}>Total Products: {products}</Text>
+        </View>
       </View>
     </Popover>
   );
