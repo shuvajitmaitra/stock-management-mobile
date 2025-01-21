@@ -2,11 +2,9 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import axiosInstance from "../constant/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { saveObject, singOut } from "@/utils/commonFunction";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
-import { router } from "expo-router";
+import axios from "axios";
 const StockContext = createContext(undefined);
 
-// Custom hook for consuming the context
 export const useStock = () => {
   const context = useContext(StockContext);
   if (!context) {
@@ -15,7 +13,6 @@ export const useStock = () => {
   return context;
 };
 
-// StockProvider Component
 export const StockProvider = ({ children }) => {
   const [stockIn, setStockIn] = useState([]);
   const [stockOut, setStockOut] = useState([]);
@@ -27,17 +24,15 @@ export const StockProvider = ({ children }) => {
   const [user, setUser] = useState({});
 
   const deleteCloudinaryImage = async (url) => {
-    console.log("url", url);
-    try {
-      const response = await axiosInstance.get("/user/delete-cloudinary-image", { url });
-      if (response.data.success) {
-        console.log("Image deleted successfully");
-      } else {
-        console.error("Failed to delete image");
-      }
-    } catch (error) {
-      console.log("error.response.data", JSON.stringify(error.response.data, null, 2));
-    }
+    const publicId = url.split("/").pop().split(".")[0];
+    await axios
+      .post("http://stock-management-server-seven.vercel.app/api/v1/user/delete-cloudinary-image", { publicId })
+      .then((res) => {
+        console.log("res.data", JSON.stringify(res.data, null, 2));
+      })
+      .catch((err) => {
+        console.log("err.response.data", JSON.stringify(err.response.data, null, 2));
+      });
   };
 
   const getUser = async () => {

@@ -10,13 +10,16 @@ import { Colors } from "@/constant/Colors";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Picker } from "@react-native-picker/picker";
+import CrossCircle from "../../assets/icons/CrossCircle";
+
 const StockModal = ({ isVisible, onClose, user }) => {
-  const { handleAddProduct, singleProduct, handleEditProduct, handleStockUpdate } = useStock();
+  const { handleAddProduct, singleProduct, handleEditProduct, handleStockUpdate, deleteCloudinaryImage } = useStock();
   const [productName, setProductName] = useState("");
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [stockType, setStockType] = useState("out");
   const [quantity, setQuantity] = useState(1);
+
   useEffect(() => {
     if (singleProduct?.name || singleProduct?.image) {
       setProductName(singleProduct?.name);
@@ -68,7 +71,6 @@ const StockModal = ({ isVisible, onClose, user }) => {
 
     try {
       if (singleProduct?.stockUpdate) {
-        console.log("singleProduct ", JSON.stringify(singleProduct, null, 2));
         await handleStockUpdate({
           name: productName,
           _id: singleProduct?._id,
@@ -90,7 +92,6 @@ const StockModal = ({ isVisible, onClose, user }) => {
       }
     } catch (error) {
       console.log("error", JSON.stringify(error, null, 2));
-      // Alert.alert("Error", "Could not add product. Please try again.");
     }
   };
 
@@ -106,7 +107,6 @@ const StockModal = ({ isVisible, onClose, user }) => {
         image: uploadedImageUrl,
         _id: singleProduct?._id,
       });
-
       setProductName("");
       setUploadedImageUrl(null);
       onClose();
@@ -118,15 +118,20 @@ const StockModal = ({ isVisible, onClose, user }) => {
   const disabled =
     singleProduct?.stockUpdate &&
     (isUploading || !quantity || (stockType === "out" && singleProduct?.stockQuantity < quantity) || !uploadedImageUrl);
+
   return (
     <ReactNativeModal
       animationType="slide"
       avoidKeyboard={true}
-      swipeDirection="down"
-      onSwipeComplete={onClose}
+      // swipeDirection="down"
+      // onSwipeComplete={() => {
+      //   !uploadedImageUrl && onClose();
+      // }}
       style={styles.modalStyle}
       isVisible={isVisible}
-      onBackdropPress={onClose}
+      onBackdropPress={() => {
+        !uploadedImageUrl && onClose();
+      }}
       backdropTransitionOutTiming={0}
     >
       <View style={styles.container}>
@@ -152,8 +157,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
         {singleProduct?.stockUpdate && (
           <>
             <Text style={styles.inputLabel}>
-              Select type
-              <RequireIcon />
+              Select type <RequireIcon />
             </Text>
             <View style={styles.pickerContainer}>
               <Picker
@@ -172,12 +176,11 @@ const StockModal = ({ isVisible, onClose, user }) => {
         {singleProduct?.stockUpdate && (
           <>
             <Text style={styles.inputLabel}>
-              Product Quantity
-              <RequireIcon />
+              Product Quantity <RequireIcon />
             </Text>
             <TextInput
-              style={[styles.input]}
-              value={quantity}
+              style={styles.input}
+              value={quantity ? `${quantity}` : ""}
               onChangeText={(num) => setQuantity(parseInt(num))}
               placeholder={quantity ? `${quantity}` : "Enter quantity..."}
               keyboardType="numeric"
@@ -193,25 +196,37 @@ const StockModal = ({ isVisible, onClose, user }) => {
         {singleProduct?.stockUpdate && stockType === "out" && quantity === 0 && (
           <Text style={{ color: "red" }}>Quantity should be greater than 0</Text>
         )}
-        <Text style={styles.inputLabel}>
-          Add Picture
-          {singleProduct?.stockUpdate && <RequireIcon />}
-        </Text>
+        {!uploadedImageUrl && (
+          <>
+            <Text style={styles.inputLabel}>Add Picture {singleProduct?.stockUpdate && <RequireIcon />}</Text>
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={openCamera}>
-            <EvilIcons name="camera" size={49} color={Colors.secondary} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={chooseFromGallery}>
-            <Ionicons name="image-outline" size={35} color={Colors.secondary} />
-          </TouchableOpacity>
-        </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={openCamera}>
+                <EvilIcons name="camera" size={49} color={Colors.secondary} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={chooseFromGallery}>
+                <Ionicons name="image-outline" size={35} color={Colors.secondary} />
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
         {isUploading && <ActivityIndicator color="#FF6F61" size="large" />}
 
         {uploadedImageUrl && (
           <View style={styles.imagePreviewContainer}>
-            <Text style={styles.uploadedText}>Product Image</Text>
-            <Image source={{ uri: uploadedImageUrl }} style={styles.imagePreview} />
+            <Text style={styles.inputLabel}>Product Image</Text>
+            <View style={styles.imagePreviewWrapper}>
+              <Image source={{ uri: uploadedImageUrl }} style={styles.imagePreview} />
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => {
+                  deleteCloudinaryImage(uploadedImageUrl);
+                  setUploadedImageUrl(null);
+                }}
+              >
+                <CrossCircle color="#FF6F61" size={30} />
+              </TouchableOpacity>
+            </View>
           </View>
         )}
 
@@ -230,21 +245,6 @@ const StockModal = ({ isVisible, onClose, user }) => {
 export default StockModal;
 
 const styles = StyleSheet.create({
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: Colors.borderColor,
-    borderRadius: 5,
-    overflow: "hidden",
-  },
-  picker: {
-    // Add any custom styles if needed
-  },
-  pickerItem: {
-    flex: 1,
-    color: Colors.bodyText,
-    backgroundColor: Colors.primary,
-    padding: 0,
-  },
   modalStyle: {
     justifyContent: "flex-end",
     margin: 0,
@@ -290,14 +290,28 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     color: Colors.white,
   },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: Colors.borderColor,
+    borderRadius: 5,
+    overflow: "hidden",
+  },
+  picker: {
+    // Additional custom styles can be added here
+  },
+  pickerItem: {
+    flex: 1,
+    color: Colors.bodyText,
+    backgroundColor: Colors.primary,
+    padding: 0,
+  },
   buttonContainer: {
     flexDirection: "row",
-
     gap: 10,
+    marginTop: 15,
   },
   button: {
     borderRadius: 10,
-
     alignItems: "center",
     borderWidth: 1,
     borderColor: Colors.secondary,
@@ -305,18 +319,11 @@ const styles = StyleSheet.create({
     width: 50,
     justifyContent: "center",
   },
-  buttonText: {
-    color: "#FFF",
-    fontWeight: "600",
-    fontSize: 14,
-  },
   imagePreviewContainer: {
-    marginTop: 10,
+    alignItems: "flex-start",
   },
-  uploadedText: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 5,
+  imagePreviewWrapper: {
+    position: "relative",
   },
   imagePreview: {
     width: 120,
@@ -325,11 +332,27 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E0E0E0",
   },
+  deleteButton: {
+    // backgroundColor: "red",
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    position: "absolute",
+    right: -10,
+    top: -10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   submitButton: {
     marginTop: 15,
     backgroundColor: "#28a745",
     padding: 12,
     borderRadius: 10,
     alignItems: "center",
+  },
+  buttonText: {
+    color: "#FFF",
+    fontWeight: "600",
+    fontSize: 14,
   },
 });
