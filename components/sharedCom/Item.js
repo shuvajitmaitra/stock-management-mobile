@@ -14,15 +14,18 @@ import ConfirmationModal from "../Modal/ConfirmationModal";
 const Item = ({ index, item, onDelete, onEdit, onUpdate, from = null, user }) => {
   const [images, setImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <View style={styles.itemContainer}>
       <Text style={styles.indexText}>{index + 1}</Text>
       {/* Left: Product Image */}
-      <TouchableOpacity onPress={() => setImages([{ uri: item.image }])}>
+      <TouchableOpacity
+        onPress={() => setImages([{ uri: item.image ? item.image : "https://pulsetechbd.com/uploads/sitesetting/pulse-(1).png" }])}
+      >
         <Image
-          source={item.image ? { uri: item.image } : require("@/assets/images/no_image.jpg")}
+          source={{ uri: item.image ? item?.image : "https://pulsetechbd.com/uploads/sitesetting/pulse-(1).png" }}
           style={styles.productImage}
-          resizeMode="cover"
+          resizeMode={item.image ? "cover" : "contain"}
         />
       </TouchableOpacity>
 
@@ -36,12 +39,14 @@ const Item = ({ index, item, onDelete, onEdit, onUpdate, from = null, user }) =>
             <SimpleLineIcons name="handbag" size={13} color="#4ecdc4" />
             <Text style={styles.quantityText}>{item?.stockQuantity || 0}</Text>
           </View>
-          <View style={[styles.quantityContainer, { marginLeft: 20, gap: 0 }]}>
-            <MaterialCommunityIcons name="currency-bdt" size={18} color="#fb8500" />
-            <Text style={[styles.quantityText, { color: "#fb8500", marginTop: 2 }]}>{item?.price || 0}</Text>
-          </View>
+          {from && (
+            <View style={[styles.quantityContainer, { marginLeft: 20, gap: 0 }]}>
+              <MaterialCommunityIcons name="currency-bdt" size={18} color="#fb8500" />
+              <Text style={[styles.quantityText, { color: "#fb8500", marginTop: 2 }]}>{item?.price || 0}</Text>
+            </View>
+          )}
           {item?.user?.fullName && (
-            <View style={styles.quantityContainer}>
+            <View style={[styles.quantityContainer, !from && { marginLeft: 10 }]}>
               <Feather name="user" size={15} color="#a0a0a0" />
               <Text style={[styles.quantityText, { color: "#a0a0a0" }]}>{item?.user?.fullName || 0}</Text>
             </View>
@@ -126,6 +131,7 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 8,
+    backgroundColor: Colors.bodyText,
   },
   detailsContainer: {
     flex: 1,
