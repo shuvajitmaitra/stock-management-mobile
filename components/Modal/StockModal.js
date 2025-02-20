@@ -162,7 +162,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
           multiline
           autoCapitalize="words"
         />
-        {!singleProduct.stockUpdate && (
+        {!singleProduct?.stockUpdate && (
           <>
             <Text style={styles.inputLabel}>Product Price</Text>
             <TextInput
