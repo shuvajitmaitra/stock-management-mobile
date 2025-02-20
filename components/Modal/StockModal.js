@@ -137,7 +137,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
       style={styles.modalStyle}
       isVisible={isVisible}
       onBackdropPress={() => {
-        !uploadedImageUrl && onClose();
+        onClose();
       }}
       backdropTransitionOutTiming={0}
     >
@@ -162,16 +162,20 @@ const StockModal = ({ isVisible, onClose, user }) => {
           multiline
           autoCapitalize="words"
         />
-        <Text style={styles.inputLabel}>Product Price</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter product name"
-          placeholderTextColor="#555"
-          value={productPrice}
-          onChangeText={(text) => setProductPrice(parseInt(text))}
-          editable={!singleProduct?.stockUpdate}
-          keyboardType="number-pad"
-        />
+        {!singleProduct.stockUpdate && (
+          <>
+            <Text style={styles.inputLabel}>Product Price</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter product name"
+              placeholderTextColor="#555"
+              value={productPrice}
+              onChangeText={(text) => setProductPrice(parseInt(text))}
+              editable={!singleProduct?.stockUpdate}
+              keyboardType="number-pad"
+            />
+          </>
+        )}
         {singleProduct?.stockUpdate && (
           <>
             <Text style={styles.inputLabel}>
