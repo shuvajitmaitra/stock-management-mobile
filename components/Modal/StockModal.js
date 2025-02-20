@@ -79,7 +79,6 @@ const StockModal = ({ isVisible, onClose, user }) => {
           stockQuantity: quantity,
           type: stockType,
           image: uploadedImageUrl,
-          price: productPrice,
         });
         setProductName("");
         setProductPrice(0);
@@ -112,6 +111,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
         name: productName,
         image: uploadedImageUrl,
         _id: singleProduct?._id,
+        price: productPrice,
       });
       setProductName("");
       setProductPrice(0);
