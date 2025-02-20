@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator, Alert } from "react-native";
 import ReactNativeModal from "react-native-modal";
 import * as ImagePicker from "expo-image-picker";
-import { uploadImageToCloudinary } from "@/utils/commonFunction";
+import { uploadImageInDigitalOcean } from "@/utils/commonFunction";
 import Divider from "../sharedCom/Divider";
 import RequireIcon from "../../assets/icons/RequireIcon";
 import { useStock } from "@/context/StockContext";
@@ -13,8 +13,9 @@ import { Picker } from "@react-native-picker/picker";
 import CrossCircle from "../../assets/icons/CrossCircle";
 
 const StockModal = ({ isVisible, onClose, user }) => {
-  const { handleAddProduct, singleProduct, handleEditProduct, handleStockUpdate, deleteCloudinaryImage } = useStock();
+  const { handleAddProduct, singleProduct, handleEditProduct, handleStockUpdate } = useStock();
   const [productName, setProductName] = useState("");
+  const [productPrice, setProductPrice] = useState(0);
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [stockType, setStockType] = useState("out");
@@ -23,6 +24,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
   useEffect(() => {
     if (singleProduct?.name || singleProduct?.image) {
       setProductName(singleProduct?.name);
+      setProductPrice(singleProduct.price);
       !singleProduct?.stockUpdate && setUploadedImageUrl(singleProduct?.image);
     }
   }, []);
@@ -41,7 +43,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
     });
 
     if (!result.canceled) {
-      await uploadImageToCloudinary(result.assets[0].uri, setIsUploading, setUploadedImageUrl);
+      await uploadImageInDigitalOcean(result.assets[0], setIsUploading, setUploadedImageUrl);
     }
   };
 
@@ -59,7 +61,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
     });
 
     if (!result.canceled) {
-      await uploadImageToCloudinary(result.assets[0].uri, setIsUploading, setUploadedImageUrl);
+      await uploadImageInDigitalOcean(result.assets[0], setIsUploading, setUploadedImageUrl);
     }
   };
 
@@ -77,16 +79,20 @@ const StockModal = ({ isVisible, onClose, user }) => {
           stockQuantity: quantity,
           type: stockType,
           image: uploadedImageUrl,
+          price: productPrice,
         });
         setProductName("");
+        setProductPrice(0);
         setUploadedImageUrl(null);
         onClose();
       } else {
         await handleAddProduct({
           name: productName,
           image: uploadedImageUrl,
+          price: productPrice,
         });
         setProductName("");
+        setProductPrice(0);
         setUploadedImageUrl(null);
         onClose();
       }
@@ -108,6 +114,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
         _id: singleProduct?._id,
       });
       setProductName("");
+      setProductPrice(0);
       setUploadedImageUrl(null);
       onClose();
     } catch (error) {
@@ -142,7 +149,8 @@ const StockModal = ({ isVisible, onClose, user }) => {
         </View>
         <Divider mb={0} />
         <Text style={styles.inputLabel}>
-          Product Name <RequireIcon />
+          Product Name
+          <RequireIcon />
         </Text>
         <TextInput
           style={styles.input}
@@ -153,6 +161,16 @@ const StockModal = ({ isVisible, onClose, user }) => {
           editable={!singleProduct?.stockUpdate}
           multiline
           autoCapitalize="words"
+        />
+        <Text style={styles.inputLabel}>Product Price</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter product name"
+          placeholderTextColor="#555"
+          value={productPrice}
+          onChangeText={(text) => setProductPrice(parseInt(text))}
+          editable={!singleProduct?.stockUpdate}
+          keyboardType="number-pad"
         />
         {singleProduct?.stockUpdate && (
           <>
@@ -220,7 +238,6 @@ const StockModal = ({ isVisible, onClose, user }) => {
               <TouchableOpacity
                 style={styles.deleteButton}
                 onPress={() => {
-                  deleteCloudinaryImage(uploadedImageUrl);
                   setUploadedImageUrl(null);
                 }}
               >

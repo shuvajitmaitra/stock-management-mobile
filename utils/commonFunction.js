@@ -158,3 +158,29 @@ export const deleteImageFromCloudinary = async (publicId) => {
     console.error("Error deleting image: ", error);
   }
 };
+
+export const uploadImageInDigitalOcean = async (asset, setIsUploading, setUploadedImageUrl) => {
+  setIsUploading(true);
+
+  try {
+    const formData = new FormData();
+    formData.append("file", {
+      uri: asset.uri,
+      name: asset.fileName || "uploaded_image",
+      type: asset.mimeType || asset.type || "image/jpeg",
+    });
+    const url = "https://api.bootcampshub.ai/api/document/useranydocument";
+    const response = await axios.post(url, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    if (response.data.success) {
+      setUploadedImageUrl(response.data.fileUrl);
+    } else {
+      setUploadedImageUrl("");
+    }
+    setIsUploading(false);
+  } catch (error) {
+    console.log("error to upload image", JSON.stringify(error, null, 2));
+    setIsUploading(false);
+  }
+};

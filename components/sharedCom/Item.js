@@ -8,6 +8,7 @@ import Feather from "@expo/vector-icons/Feather";
 import Foundation from "@expo/vector-icons/Foundation";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ConfirmationModal from "../Modal/ConfirmationModal";
 
 const Item = ({ index, item, onDelete, onEdit, onUpdate, from = null, user }) => {
@@ -34,6 +35,10 @@ const Item = ({ index, item, onDelete, onEdit, onUpdate, from = null, user }) =>
           <View style={styles.quantityContainer}>
             <SimpleLineIcons name="handbag" size={13} color="#4ecdc4" />
             <Text style={styles.quantityText}>{item?.stockQuantity || 0}</Text>
+          </View>
+          <View style={[styles.quantityContainer, { marginLeft: 20, gap: 0 }]}>
+            <MaterialCommunityIcons name="currency-bdt" size={18} color="#fb8500" />
+            <Text style={[styles.quantityText, { color: "#fb8500", marginTop: 2 }]}>{item?.price || 0}</Text>
           </View>
           {item?.user?.fullName && (
             <View style={styles.quantityContainer}>
