@@ -42,7 +42,15 @@ const Item = ({ index, item, onDelete, onEdit, onUpdate, from = null, user }) =>
           {from && (
             <View style={[styles.quantityContainer, { marginLeft: 20, gap: 0 }]}>
               <MaterialCommunityIcons name="currency-bdt" size={18} color="#fb8500" />
-              <Text style={[styles.quantityText, { color: "#fb8500", marginTop: 2 }]}>{item?.price || 0}</Text>
+              <Text style={[styles.quantityText, { color: "#fb8500", marginTop: 2 }]}>
+                {/* {(item?.price || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,") || 0} */}
+
+                {item?.price
+                  ? Math.floor(item.price)
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  : "0"}
+              </Text>
             </View>
           )}
           {item?.user?.fullName && (

@@ -167,7 +167,7 @@ const StockModal = ({ isVisible, onClose, user }) => {
             <Text style={styles.inputLabel}>Product Price</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter product name"
+              placeholder="Enter product price"
               placeholderTextColor="#555"
               value={productPrice}
               onChangeText={(text) => setProductPrice(parseInt(text))}
