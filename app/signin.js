@@ -41,7 +41,7 @@ const SignInScreen = () => {
         })
         .catch((error) => {
           router.push("/signin");
-          console.error("Login error:", error.response);
+          Alert.alert("Login Failed", error.response.data.message);
           singOut();
         });
     } else {
