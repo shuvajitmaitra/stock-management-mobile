@@ -169,7 +169,7 @@ export const uploadImageInDigitalOcean = async (asset, setIsUploading, setUpload
       name: asset.fileName || "uploaded_image",
       type: asset.mimeType || asset.type || "image/jpeg",
     });
-    const url = "https://api.bootcampshub.ai/api/document/useranydocument";
+    const url = "https://api.skillbnk.com/api/document/useranydocument";
     const response = await axios.post(url, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
