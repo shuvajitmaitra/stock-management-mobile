@@ -3,16 +3,28 @@ import { Colors } from "@/constant/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Tabs } from "expo-router";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
-import StockInIcon from "@/assets/icons/StockInIcon";
-import StockOutIcon from "@/assets/icons/StockOutIcon";
-import HomeIcon from "@/assets/icons/HomeIcon";
 import { StockProvider } from "@/context/StockContext";
 import TabBar from "../../components/TabBar";
-
+import * as Updates from "expo-updates";
 export default function TabLayout() {
   const [isSignedIn, setIsSignedIn] = useState(null);
 
   useEffect(() => {
+    async function checkForUpdates() {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          console.log("New update available:", update);
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync();
+        } else {
+          console.log("No update available");
+        }
+      } catch (e) {
+        console.error("Update error:", e);
+      }
+    }
+    checkForUpdates();
     const checkSignIn = async () => {
       try {
         const jsonValue = await AsyncStorage.getItem("user");
@@ -49,12 +61,6 @@ export default function TabLayout() {
           options={{
             title: "Dashboard",
             headerShown: false,
-            //   tabBarIcon: ({ color, size, focused }) => (
-            //     <View style={focused && styles.tabBarItemContainer}>
-            //       <HomeIcon size={size} color={color} />
-            //     </View>
-            //   ),
-            //   tabBarLabel: () => null,
           }}
         />
         <Tabs.Screen
@@ -62,12 +68,6 @@ export default function TabLayout() {
           options={{
             headerShown: false,
             title: "Stock In",
-            //   tabBarIcon: ({ color, focused }) => (
-            //     <View style={focused && styles.tabBarItemContainer}>
-            //       <StockInIcon size={30} color={color} />
-            //     </View>
-            //   ),
-            //   tabBarLabel: () => null,
           }}
         />
         <Tabs.Screen
@@ -75,12 +75,6 @@ export default function TabLayout() {
           options={{
             headerShown: false,
             title: "Stock Out",
-            // tabBarIcon: ({ color, focused }) => (
-            //   <View style={focused && styles.tabBarItemContainer}>
-            //     <StockOutIcon size={30} color={color} />
-            //   </View>
-            // ),
-            // tabBarLabel: () => null,
           }}
         />
       </Tabs>
